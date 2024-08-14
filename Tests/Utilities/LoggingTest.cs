@@ -41,7 +41,7 @@ namespace Tests.Utilities
         [Fact]
         public void TestLog()
         {
-            var logger = new Mock<ISegmentLogger>();
+            var logger = new Mock<IHightouchLogger>();
             Analytics.Logger = logger.Object;
             var exception = new Exception();
             _storage

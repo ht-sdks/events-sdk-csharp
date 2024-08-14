@@ -120,7 +120,7 @@ echo "generating meta files ..."
 # launch unity to create a dummy head project
 "$UNITY" -batchmode -quit -createProject dummy
 # update the manifest of dummy head to import the package
-echo "$(jq '.dependencies += {"com.segment.analytics.csharp": "file:../../events-sdk-csharp"}' dummy/Packages/manifest.json)" > dummy/Packages/manifest.json
+echo "$(jq '.dependencies += {"com.hightouch.events.csharp": "file:../../events-sdk-csharp"}' dummy/Packages/manifest.json)" > dummy/Packages/manifest.json
 # launch unity in quit mode to generate meta files
 "$UNITY" -batchmode -quit -projectPath dummy
 

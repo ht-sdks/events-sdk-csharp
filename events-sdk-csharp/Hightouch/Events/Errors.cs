@@ -35,7 +35,7 @@ namespace Hightouch.Events
         /// Extension method to reports an internal error to the user-defined error handler if
         /// analytics instance is available to access.
         /// </summary>
-        /// <param name="analytics">Segment Analytics</param>
+        /// <param name="analytics">Hightouch Analytics</param>
         /// <param name="error">Exception to report</param>
         public static void ReportInternalError(this Analytics analytics, AnalyticsError error)
         {
@@ -47,7 +47,7 @@ namespace Hightouch.Events
         /// Extension method to reports an internal error to the user-defined error handler if
         /// analytics instance is available to access.
         /// </summary>
-        /// <param name="analytics">Segment Analytics</param>
+        /// <param name="analytics">Hightouch Analytics</param>
         /// <param name="type">Type of the analytics error</param>
         /// <param name="exception">Exception to throw</param>
         /// <param name="message">Error message</param>

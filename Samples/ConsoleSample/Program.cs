@@ -10,7 +10,7 @@ var configuration = new Configuration("YOUR WRITE KEY",
     flushInterval: 10,
     exceptionHandler: new ErrorHandler());
 var analytics = new Analytics(configuration);
-Analytics.Logger = new SegmentLogger();
+Analytics.Logger = new HightouchLogger();
 
 analytics.Identify("foo");
 analytics.Track("track right after identify");

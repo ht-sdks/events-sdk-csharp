@@ -40,7 +40,7 @@ namespace Hightouch.Events
         internal virtual IDispatcher NetworkIODispatcher { get; }
         internal virtual IDispatcher AnalyticsDispatcher { get; }
 
-        public static ISegmentLogger Logger = new StubLogger();
+        public static IHightouchLogger Logger = new StubLogger();
 
         internal UserInfo _userInfo;
 

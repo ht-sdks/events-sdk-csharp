@@ -50,14 +50,14 @@ namespace Hightouch.Events
         /// <summary>
         /// Configuration that analytics can use
         /// </summary>
-        /// <param name="writeKey">the Segment writeKey</param>
+        /// <param name="writeKey">the Hightouch writeKey</param>
         /// <param name="flushAt">count of events at which we flush events, defaults to <c>20</c></param>
         /// <param name="flushInterval">interval in seconds at which we flush events, defaults to <c>30 seconds</c></param>
         /// <param name="defaultSettings">settings object that will be used as fallback in case of network failure, defaults to empty</param>
         /// <param name="autoAddSegmentDestination">automatically add SegmentDestination plugin, defaults to <c>true</c></param>
         /// <param name="useSynchronizeDispatcher">forcing everything to run synchronously, used for unit tests </param>
-        /// <param name="apiHost">set a default apiHost to which Segment sends events, defaults to <c>api.segment.io/v1</c></param>
-        /// <param name="cdnHost">set a default cdnHost to which Segment fetches settings, defaults to <c>cdn-settings.segment.com/v1</c></param>
+        /// <param name="apiHost">set a default apiHost to which Hightouch sends events, defaults to <c>us-east-1.hightouch-events.com</c></param>
+        /// <param name="cdnHost">set a default cdnHost to which Hightouch fetches settings, defaults to <c>us-east-1.hightouch-events.com</c></param>
         /// <param name="analyticsErrorHandler">set an error handler to handle errors happened in analytics</param>
         /// <param name="storageProvider">set a storage provider to tell the analytics where to store your data:
         ///     <list type="bullet">

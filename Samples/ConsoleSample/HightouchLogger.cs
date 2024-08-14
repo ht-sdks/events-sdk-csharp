@@ -3,7 +3,7 @@ using Hightouch.Events.Utilities;
 
 namespace ConsoleSample
 {
-    class SegmentLogger : ISegmentLogger
+    class HightouchLogger : IHightouchLogger
     {
         public void Log(LogLevel logLevel, Exception exception = null, string message = null)
         {

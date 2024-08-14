@@ -1,7 +1,7 @@
 # events-sdk-csharp
 
 ![Nuget](https://img.shields.io/nuget/v/Hightouch.Events.CSharp)
-[![openupm](https://img.shields.io/npm/v/com.segment.analytics.csharp?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.segment.analytics.csharp/)
+[![openupm](https://img.shields.io/npm/v/com.hightouch.events.csharp?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.hightouch.events.csharp/)
 [![](https://github.com/ht-sdks/events-sdk-csharp/actions/workflows/build.yml/badge.svg)](https://github.com/ht-sdks/events-sdk-csharp/actions)
 [![](https://img.shields.io/github/license/ht-sdks/events-sdk-csharp)](https://github.com/ht-sdks/events-sdk-csharp/blob/main/LICENSE)
 
@@ -507,11 +507,11 @@ Plugins can also report errors to the handler by using the [`.ReportInternalErro
 
 ### Listen to Analytics Logs
 
-Besides error handling, you could also provide a static `ISegmentLogger` to help log and debug as well as error handling. The same log that is reported by `ReportInternalError` is also reported to this static logger. The static logger also receives more errors and exceptions because it does not require an `Analytics` instance available. Thus, it's also a good idea to use the logger as an addition to `IAnalyticsErrorHandler`.
+Besides error handling, you could also provide a static `IHightouchLogger` to help log and debug as well as error handling. The same log that is reported by `ReportInternalError` is also reported to this static logger. The static logger also receives more errors and exceptions because it does not require an `Analytics` instance available. Thus, it's also a good idea to use the logger as an addition to `IAnalyticsErrorHandler`.
 ```csharp
-Analytics.Logger = new SegmentLogger();
+Analytics.Logger = new HightouchLogger();
 
-class SegmentLogger : ISegmentLogger
+class HightouchLogger : IHightouchLogger
 {
     public void Log(LogLevel logLevel, Exception exception = null, string message = null)
     {
@@ -598,7 +598,7 @@ For sample usages of the SDK in specific platforms, checkout the following:
 | General     | [Custom HTTP client](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/ProxyHttpClient.cs)                 |
 |             | [Custom Storage](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Segment/Analytics/Utilities/Storage.cs#L200) |
 |             | [Flush Policy](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/FlushOnScreenEventsPolicy.cs)             |
-|             | [Custom Logger](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/SegmentLogger.cs)                        |
+|             | [Custom Logger](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/HightouchLogger.cs)                        |
 |             | [Custom Error Handler](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/NetworkErrorHandler.cs)           |
 
 ## Compatibility

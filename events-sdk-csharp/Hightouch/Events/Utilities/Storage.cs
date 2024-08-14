@@ -24,11 +24,11 @@ namespace Hightouch.Events.Utilities
 
         // backing fields that holds the actual string representation
         // needed for switch statement, has to be compile time available
-        public const string _UserId = "segment.userId";
-        public const string _Traits = "segment.traits";
-        public const string _AnonymousId = "segment.anonymousId";
-        public const string _Settings = "segment.settings";
-        public const string _Events = "segment.events";
+        public const string _UserId = "hightouch.userId";
+        public const string _Traits = "hightouch.traits";
+        public const string _AnonymousId = "hightouch.anonymousId";
+        public const string _Settings = "hightouch.settings";
+        public const string _Events = "hightouch.events";
         // enum alternatives
         public static readonly StorageConstants UserId = new StorageConstants(_UserId);
         public static readonly StorageConstants Traits = new StorageConstants(_Traits);

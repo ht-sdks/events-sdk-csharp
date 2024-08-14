@@ -1,7 +1,7 @@
 Update Version
 ==========
 * update `<Version>` value in `events-sdk-csharp.csproj`
-* update `HightouchVersion` value in `Segment/Analytics/Version.cs`
+* update `HightouchVersion` value in `Hightouch/Events/Version.cs`
 
 Release to Nuget
 ==========
