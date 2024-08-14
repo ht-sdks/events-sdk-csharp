@@ -29,7 +29,7 @@ namespace Segment.Analytics.Plugins
             base.Configure(analytics);
             _library = new JsonObject
             {
-                [LibraryNameKey] = "Analytics-CSharp",
+                [LibraryNameKey] = "events-sdk-csharp",
                 [LibraryVersionKey] = Version.SegmentVersion
             };
         }

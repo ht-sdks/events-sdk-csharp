@@ -14,6 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Analytics-CSharp\Analytics-CSharp.csproj" />
+      <ProjectReference Include="..\..\..\events-sdk-csharp\events-sdk-csharp.csproj" />
     </ItemGroup>
 </Project>

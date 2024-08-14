@@ -98,7 +98,7 @@ namespace Segment.Analytics.Compat
     /// <summary>
     /// Plugin that patches user id on a per event basis.
     /// This plugin helps migration from the old Analytics.NET and Analytics.Xamarin libraries,
-    /// since Analytics-CSharp does not support passing user id on every track method.
+    /// since events-sdk-csharp does not support passing user id on every track method.
     /// </summary>
     [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]
     class UserIdPlugin : EventPlugin

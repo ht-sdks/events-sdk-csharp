@@ -1,5 +1,5 @@
 <linker>
-    <assembly fullname="Segment.Analytics.CSharp" preserve="all" />
+    <assembly fullname="Hightouch.Events.CSharp" preserve="all" />
     <assembly fullname="Coroutine.NET" preserve="all" />
     <assembly fullname="Newtonsoft.Json" preserve="all" />
     <assembly fullname="Serialization.NET" preserve="all" />

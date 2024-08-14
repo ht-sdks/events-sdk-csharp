@@ -1,22 +1,39 @@
-# Analytics-CSharp
+# events-sdk-csharp
 
-### 🎉 Flagship 🎉
-This library is one of Segment’s most popular Flagship libraries. It is actively maintained by Segment, benefitting from new feature releases and ongoing support.
-
-![Nuget](https://img.shields.io/nuget/v/Segment.Analytics.CSharp)
+![Nuget](https://img.shields.io/nuget/v/Hightouch.Events.CSharp)
 [![openupm](https://img.shields.io/npm/v/com.segment.analytics.csharp?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.segment.analytics.csharp/)
-[![](https://github.com/segmentio/analytics-csharp/actions/workflows/build.yml/badge.svg)](https://github.com/segmentio/analytics-csharp/actions)
-[![](https://img.shields.io/github/license/segmentio/analytics-csharp)](https://github.com/segmentio/analytics-csharp/blob/main/LICENSE)
+[![](https://github.com/ht-sdks/events-sdk-csharp/actions/workflows/build.yml/badge.svg)](https://github.com/ht-sdks/events-sdk-csharp/actions)
+[![](https://img.shields.io/github/license/ht-sdks/events-sdk-csharp)](https://github.com/ht-sdks/events-sdk-csharp/blob/main/LICENSE)
 
-- [Analytics-CSharp](#analytics-csharp)
+- [events-sdk-csharp](#events-sdk-csharp)
+    - [BREAKING CHANGES ALERT: if you are upgrading from 1.+ to 2.+, check out the breaking changes list here.](#breaking-changes-alert-if-you-are-upgrading-from-1-to-2-check-out-the-breaking-changes-list-here)
   - [Getting Started](#getting-started)
-  - [Tracking Methods](#tracking-methods)
+    - [Track](#track)
+    - [Screen](#screen)
+    - [Page](#page)
+    - [Group](#group)
   - [Plugin Architecture](#plugin-architecture)
+    - [Fundamentals](#fundamentals)
+      - [Plugin](#plugin)
+      - [EventPlugin](#eventplugin)
+      - [DestinationPlugin](#destinationplugin)
+    - [Advanced concepts](#advanced-concepts)
   - [Adding a plugin](#adding-a-plugin)
+    - [Example projects using events-sdk-csharp](#example-projects-using-events-sdk-csharp)
   - [Utility Methods](#utility-methods)
+    - [Add](#add)
+    - [Find](#find)
+    - [Remove](#remove)
+    - [Flush](#flush)
+    - [Reset](#reset)
   - [Controlling Upload With Flush Policies](#controlling-upload-with-flush-policies)
+    - [Adding or removing policies](#adding-or-removing-policies)
+    - [Creating your own flush policies](#creating-your-own-flush-policies)
   - [Handling Errors](#handling-errors)
+    - [Reporting errors from plugins](#reporting-errors-from-plugins)
+    - [Listen to Analytics Logs](#listen-to-analytics-logs)
   - [Customize HTTP Client](#customize-http-client)
+    - [Proxying HTTP Calls](#proxying-http-calls)
   - [Customize Storage](#customize-storage)
   - [Json Library](#json-library)
   - [Samples](#samples)
@@ -30,7 +47,7 @@ This library is one of Segment’s most popular Flagship libraries. It is active
 
 The hassle-free way to add Segment analytics to your .Net app (Unity/Xamarin/.Net). Analytics helps you measure your users, product, and business. It unlocks insights into your app's funnel, core business metrics, and whether you have product-market fit.
 
-Analytics-CSharp is supported across the following platforms:
+events-sdk-csharp is supported across the following platforms:
 * net/.net core/.net framework
 * mono
 * universal windows platform
@@ -46,19 +63,19 @@ Analytics-CSharp is supported across the following platforms:
 
 **NOTE: Migrating from Analytics.NET and Analytics.Xamarin? See our migration guide [here](https://segment.com/docs/connections/sources/catalog/libraries/server/csharp/migration-guide/)**
 
-### BREAKING CHANGES ALERT: if you are upgrading from 1.+ to 2.+, check out the breaking changes list [here](https://github.com/segmentio/Analytics-CSharp/releases/tag/2.0.0).
+### BREAKING CHANGES ALERT: if you are upgrading from 1.+ to 2.+, check out the breaking changes list [here](https://github.com/ht-sdks/events-sdk-csharp/releases/tag/2.0.0).
 
 ## Getting Started
 
-To get started with the Analytics-CSharp library:
+To get started with the events-sdk-csharp library:
 
 1. Create a Source in Segment.
    1. Go to **Connections > Sources > Add Source**.
    2. Search for **Xamarin** or **Unity** or **.NET** and click **Add source**.
-2. Add the Analytics dependency to your project. **Analytics-CSharp** is distributed via NuGet. Check other installation options [here](https://www.nuget.org/packages/Segment.Analytics.CSharp/).
+2. Add the Analytics dependency to your project. **events-sdk-csharp** is distributed via NuGet. Check other installation options [here](https://www.nuget.org/packages/Hightouch.Events.CSharp/).
 
     ```
-    dotnet add package Segment.Analytics.CSharp --version <LATEST_VERSION>
+    dotnet add package Hightouch.Events.CSharp --version <LATEST_VERSION>
     ```
     For Unity, it is distributed via OpenUPM. Read more about it [here](https://openupm.com/packages/com.segment.analytics.csharp/?subPage=readme).
     ```
@@ -93,7 +110,7 @@ To get started with the Analytics-CSharp library:
 
 ## Tracking Methods
 
-Once you've installed the mobile or server Analytics-CSharp library, you can start collecting data through Segment's tracking methods:
+Once you've installed the mobile or server events-sdk-csharp library, you can start collecting data through Segment's tracking methods:
 - [Identify](#identify)
 - [Track](#track)
 - [Screen](#screen)
@@ -302,11 +319,11 @@ var yourPlugin = new SomePlugin()
 analytics.Add(yourPlugin)
 ```
 
-### Example projects using Analytics-CSharp
-See how different platforms and languages use Analytics-CSharp in different [example projects](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples).
+### Example projects using events-sdk-csharp
+See how different platforms and languages use events-sdk-csharp in different [example projects](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples).
 
 ## Utility Methods
-The Analytics-CSharp utility methods help you work with plugins from the analytics timeline. They include:
+The events-sdk-csharp utility methods help you work with plugins from the analytics timeline. They include:
 - [Add](#add)
 - [Find](#find)
 - [Remove](#remove)
@@ -446,7 +463,7 @@ class FlushOnScreenEventsPolicy : IFlushPolicy
 ## Handling Errors
 You can handle analytics client errors through the `analyticsErrorHandler` option.
 
-The error handler configuration requires an instance that implements `IAnalyticsErrorHandler` which will get called whenever an error happens on the analytics client. It will receive a general `Exception`, but you can check if the exception is a type of `AnalyticsError` and converts to get more info about the error. Checkout [here](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Errors.cs#L77) to see a full list of error types that analytics throws.
+The error handler configuration requires an instance that implements `IAnalyticsErrorHandler` which will get called whenever an error happens on the analytics client. It will receive a general `Exception`, but you can check if the exception is a type of `AnalyticsError` and converts to get more info about the error. Checkout [here](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Segment/Analytics/Errors.cs#L77) to see a full list of error types that analytics throws.
 
 You can use this error handling to trigger different behaviours in the client when a problem occurs. For example if the client gets rate limited you could use the error handler to swap flush policies to be less aggressive:
 
@@ -474,7 +491,7 @@ class NetworkErrorHandler : IAnalyticsErrorHandler
 
 ### Reporting errors from plugins
 
-Plugins can also report errors to the handler by using the [`.ReportInternalError`](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Errors.cs#L54) function of the analytics client, we recommend using the `AnalyticsErrorType.PluginError` for consistency, and attaching the `exception` with the actual exception that was hit:
+Plugins can also report errors to the handler by using the [`.ReportInternalError`](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Segment/Analytics/Errors.cs#L54) function of the analytics client, we recommend using the `AnalyticsErrorType.PluginError` for consistency, and attaching the `exception` with the actual exception that was hit:
 
 ```csharp
     try
@@ -521,7 +538,7 @@ class SegmentLogger : ISegmentLogger
 
 ## Customize HTTP Client
 
-The SDK allows you to have full control over the network components. You can easily swap out System.Net with your favorite network library by implementing `IHTTPClientProvider` and extending `HTTPClient`. Take a look at [this example](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs) where the default http client is fully replaced by Unity's `UnityWebRequest`.
+The SDK allows you to have full control over the network components. You can easily swap out System.Net with your favorite network library by implementing `IHTTPClientProvider` and extending `HTTPClient`. Take a look at [this example](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs) where the default http client is fully replaced by Unity's `UnityWebRequest`.
 
 ### Proxying HTTP Calls
 
@@ -557,7 +574,7 @@ class ProxyHttpClientProvider : IHTTPClientProvider
 
 ## Customize Storage
 
-The SDK also allows you to fully customize your storage strategy. It comes with two standard providers: `DefaultStorageProvider` that stores data to local disk and `InMemoryStorageProvider` that stores data all in memory. You can write up your own provider according to your needs, for example, store data to a database or to your own server directly, by implementing `IStorage` and `IStorageProvider`. Please refer to the implementation of [`Storage`](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Utilities/Storage.cs) as example.
+The SDK also allows you to fully customize your storage strategy. It comes with two standard providers: `DefaultStorageProvider` that stores data to local disk and `InMemoryStorageProvider` that stores data all in memory. You can write up your own provider according to your needs, for example, store data to a database or to your own server directly, by implementing `IStorage` and `IStorageProvider`. Please refer to the implementation of [`Storage`](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Segment/Analytics/Utilities/Storage.cs) as example.
 
 ## Json Library
 
@@ -571,24 +588,24 @@ For sample usages of the SDK in specific platforms, checkout the following:
 
 | Platform    | Sample                                                                                                                                 |
 |-------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Asp.Net     | [Setup with dependency injection](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/AspNetSample)                        |
-| Asp.Net MVC | [Setup with dependency injection](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/AspNetMvcSample)                     |
-| Console     | [Basic setups](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/Program.cs)                               |
-| Unity       | [Singleton Analytics](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/SingletonAnalytics.cs)               |
-|             | [Lifecycle plugin](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/LifecyclePlugin.cs)                     |
-|             | [Custom HTTPClient](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs)                    |
-| Xamarin     | [Basic setups](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/XamarinSample)                                          |
-| General     | [Custom HTTP client](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/ProxyHttpClient.cs)                 |
-|             | [Custom Storage](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Utilities/Storage.cs#L200) |
-|             | [Flush Policy](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/FlushOnScreenEventsPolicy.cs)             |
-|             | [Custom Logger](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/SegmentLogger.cs)                        |
-|             | [Custom Error Handler](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/NetworkErrorHandler.cs)           |
+| Asp.Net     | [Setup with dependency injection](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/AspNetSample)                        |
+| Asp.Net MVC | [Setup with dependency injection](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/AspNetMvcSample)                     |
+| Console     | [Basic setups](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/Program.cs)                               |
+| Unity       | [Singleton Analytics](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/SingletonAnalytics.cs)               |
+|             | [Lifecycle plugin](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/LifecyclePlugin.cs)                     |
+|             | [Custom HTTPClient](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs)                    |
+| Xamarin     | [Basic setups](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/XamarinSample)                                          |
+| General     | [Custom HTTP client](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/ProxyHttpClient.cs)                 |
+|             | [Custom Storage](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Segment/Analytics/Utilities/Storage.cs#L200) |
+|             | [Flush Policy](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/FlushOnScreenEventsPolicy.cs)             |
+|             | [Custom Logger](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/SegmentLogger.cs)                        |
+|             | [Custom Error Handler](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/NetworkErrorHandler.cs)           |
 
 ## Compatibility
-This library targets `.NET Standard 1.3` and `.NET Standard 2.0`. Checkout [here](https://www.nuget.org/packages/Segment.Analytics.CSharp/#supportedframeworks-body-tab) for compatible platforms.
+This library targets `.NET Standard 1.3` and `.NET Standard 2.0`. Checkout [here](https://www.nuget.org/packages/Hightouch.Events.CSharp/#supportedframeworks-body-tab) for compatible platforms.
 
 ## Changelog
-[View the Analytics-CSharp changelog on GitHub](https://github.com/segmentio/analytics-csharp/releases).
+[View the events-sdk-csharp changelog on GitHub](https://github.com/ht-sdks/events-sdk-csharp/releases).
 
 
 ## Contributing
