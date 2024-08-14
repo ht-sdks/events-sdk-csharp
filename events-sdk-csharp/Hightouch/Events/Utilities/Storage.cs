@@ -131,12 +131,12 @@ namespace Hightouch.Events.Utilities
             Configuration config = analytics.Configuration;
             string rootDir = PersistentDataPath;
             string storageDirectory = rootDir + Path.DirectorySeparatorChar +
-                                   "segment.data" + Path.DirectorySeparatorChar +
+                                   "hightouch.data" + Path.DirectorySeparatorChar +
                                    config.WriteKey + Path.DirectorySeparatorChar +
                                    "events";
 
             var userPrefs = new UserPrefs(rootDir + Path.DirectorySeparatorChar +
-                                       "segment.prefs" + Path.DirectorySeparatorChar + config.WriteKey, config.AnalyticsErrorHandler);
+                                       "hightouch.prefs" + Path.DirectorySeparatorChar + config.WriteKey, config.AnalyticsErrorHandler);
             var eventStream = new FileEventStream(storageDirectory);
             return new Storage(userPrefs, eventStream, analytics.Store, config.WriteKey, analytics.FileIODispatcher)
             {
@@ -179,7 +179,7 @@ namespace Hightouch.Events.Utilities
     /// </code>
     ///
     /// Each file stored is a batch of events. When uploading events the contents of the file can be
-    /// sent as-is to the Segment batch upload endpoint.
+    /// sent as-is to the Hightouch batch upload endpoint.
     ///
     /// Some terms:
     /// <list type="bullet">
@@ -247,7 +247,7 @@ namespace Hightouch.Events.Utilities
             _eventStream = eventStream;
             _store = store;
             _writeKey = writeKey;
-            _fileIndexKey = "segment.events.file.index." + writeKey;
+            _fileIndexKey = "hightouch.events.file.index." + writeKey;
             _ioDispatcher = ioDispatcher;
         }
 
