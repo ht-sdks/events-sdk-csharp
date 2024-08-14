@@ -15,7 +15,7 @@ namespace Hightouch.Events
 
         public int FlushInterval { get; }
 
-        public bool AutoAddSegmentDestination { get; }
+        public bool AutoAddHightouchDestination { get; }
 
         public string ApiHost { get; }
 
@@ -54,7 +54,7 @@ namespace Hightouch.Events
         /// <param name="flushAt">count of events at which we flush events, defaults to <c>20</c></param>
         /// <param name="flushInterval">interval in seconds at which we flush events, defaults to <c>30 seconds</c></param>
         /// <param name="defaultSettings">settings object that will be used as fallback in case of network failure, defaults to empty</param>
-        /// <param name="autoAddSegmentDestination">automatically add SegmentDestination plugin, defaults to <c>true</c></param>
+        /// <param name="autoAddHightouchDestination">automatically add HightouchDestination plugin, defaults to <c>true</c></param>
         /// <param name="useSynchronizeDispatcher">forcing everything to run synchronously, used for unit tests </param>
         /// <param name="apiHost">set a default apiHost to which Hightouch sends events, defaults to <c>us-east-1.hightouch-events.com</c></param>
         /// <param name="cdnHost">set a default cdnHost to which Hightouch fetches settings, defaults to <c>us-east-1.hightouch-events.com</c></param>
@@ -77,7 +77,7 @@ namespace Hightouch.Events
             int flushAt = 20,
             int flushInterval = 30,
             Settings defaultSettings = new Settings(),
-            bool autoAddSegmentDestination = true,
+            bool autoAddHightouchDestination = true,
             bool useSynchronizeDispatcher = false,
             string apiHost = null,
             string cdnHost = null,
@@ -91,7 +91,7 @@ namespace Hightouch.Events
             FlushAt = flushAt;
             FlushInterval = flushInterval;
             DefaultSettings = defaultSettings;
-            AutoAddSegmentDestination = autoAddSegmentDestination;
+            AutoAddHightouchDestination = autoAddHightouchDestination;
             UseSynchronizeDispatcher = useSynchronizeDispatcher;
             ApiHost = apiHost;
             CdnHost = cdnHost;
@@ -109,7 +109,7 @@ namespace Hightouch.Events
             int flushAt = 20,
             int flushInterval = 30,
             Settings defaultSettings = new Settings(),
-            bool autoAddSegmentDestination = true,
+            bool autoAddHightouchDestination = true,
             bool userSynchronizeDispatcher = false,
             string apiHost = null,
             string cdnHost = null,
@@ -119,7 +119,7 @@ namespace Hightouch.Events
                 flushAt,
                 flushInterval,
                 defaultSettings,
-                autoAddSegmentDestination,
+                autoAddHightouchDestination,
                 userSynchronizeDispatcher,
                 apiHost,
                 cdnHost,

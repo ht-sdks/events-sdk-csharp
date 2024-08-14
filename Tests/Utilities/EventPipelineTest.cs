@@ -48,7 +48,7 @@ namespace Tests.Utilities
 
             var config = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 flushInterval: 0,
                 flushAt: 2,
@@ -160,9 +160,9 @@ namespace Tests.Utilities
             }
             _analytics.AddFlushPolicy(new FrequencyFlushPolicy(1000L));
 
-            // since we set autoAddSegmentDestination = false, we need to manually add it to analytics.
-            // we need a mocked SegmentDestination so we can redirect Flush call to this eventPipeline.
-            var segmentDestination = new Mock<SegmentDestination>();
+            // since we set autoAddHightouchDestination = false, we need to manually add it to analytics.
+            // we need a mocked HightouchDestination so we can redirect Flush call to this eventPipeline.
+            var segmentDestination = new Mock<HightouchDestination>();
             segmentDestination.Setup(o => o.Flush()).Callback(() => eventPipeline.Flush());
             segmentDestination.Setup(o => o.Analytics).Returns(_analytics);
             _analytics.Add(segmentDestination.Object);

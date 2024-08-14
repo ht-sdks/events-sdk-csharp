@@ -21,7 +21,7 @@ namespace Tests.Utilities
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true
             );
             _analytics = new Mock<Analytics>(config){CallBase = true};
@@ -108,7 +108,7 @@ namespace Tests.Utilities
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 analyticsErrorHandler: errorHandler.Object
             );

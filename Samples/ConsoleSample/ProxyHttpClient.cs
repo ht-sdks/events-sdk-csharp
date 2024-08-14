@@ -8,7 +8,7 @@ namespace ConsoleSample
         {
         }
 
-        public override string SegmentURL(string host, string path)
+        public override string HightouchURL(string host, string path)
         {
             if (host.Equals(_apiHost))
             {

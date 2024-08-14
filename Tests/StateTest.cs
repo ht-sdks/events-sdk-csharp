@@ -31,7 +31,7 @@ namespace Tests
             };
             _configuration = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 defaultSettings: _settings
             );
@@ -146,7 +146,7 @@ namespace Tests
             _configuration = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true
             );
             _storage = new Mock<IStorage>();

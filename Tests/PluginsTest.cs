@@ -30,7 +30,7 @@ namespace Tests
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 httpClientProvider: new MockHttpClientProvider(mockHttpClient)
             );
@@ -99,7 +99,7 @@ namespace Tests
         [Fact]
         public void FindByDestinationKey()
         {
-            var expected = new SegmentDestination();
+            var expected = new HightouchDestination();
             _analytics.Add(expected);
 
             DestinationPlugin actual = _analytics.Find(expected.Key);

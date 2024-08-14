@@ -24,7 +24,7 @@ namespace Hightouch.Events.Plugins
 
             foreach (Plugin plugin in Analytics.Timeline._plugins[PluginType.Destination]._plugins)
             {
-                if (plugin is DestinationPlugin destinationPlugin && !(plugin is SegmentDestination) && destinationPlugin._enabled)
+                if (plugin is DestinationPlugin destinationPlugin && !(plugin is HightouchDestination) && destinationPlugin._enabled)
                 {
                     bundled.Add(destinationPlugin.Key);
                 }

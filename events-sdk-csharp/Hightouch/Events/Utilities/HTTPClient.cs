@@ -11,15 +11,15 @@ namespace Hightouch.Events.Utilities
 {
     /// <summary>
     /// The template that defines the common logic that is required
-    /// for a HTTPClient to fetch settings and to upload batches from/to Segment.
+    /// for a HTTPClient to fetch settings and to upload batches from/to Hightouch.
     /// Extend this class and implement the abstract methods if you want to handle
     /// http requests with a different library other than System.Net.
     /// </summary>
     public abstract class HTTPClient
     {
-        internal const string DefaultAPIHost = "api.segment.io/v1";
+        internal const string DefaultAPIHost = "us-east-1.hightouch-events.com";
 
-        internal const string DefaultCdnHost = "cdn-settings.segment.com/v1";
+        internal const string DefaultCdnHost = "cdn-settings.hightouch-events.com";
 
         private readonly string _apiKey;
 
@@ -49,10 +49,10 @@ namespace Hightouch.Events.Utilities
         }
 
         /// <summary>
-        /// Returns formatted url to Segment's server.
+        /// Returns formatted url to Hightouch's server.
         /// If you want to use your own server, override this method like the following
         /// <code>
-        ///     public virtual string SegmentURL(string host, string path)
+        ///     public virtual string HightouchURL(string host, string path)
         ///     {
         ///         if (host is cdnHost)
         ///         {
@@ -65,13 +65,13 @@ namespace Hightouch.Events.Utilities
         /// </code>
         /// </summary>
         /// <param name="host">cdnHost or apiHost</param>
-        /// <param name="path">Path to segment's /settings endpoint or /b endpoints</param>
+        /// <param name="path">Path to Hightouch's /settings endpoint or /b endpoints</param>
         /// <returns>Formatted url</returns>
-        public virtual string SegmentURL(string host, string path) => "https://" + host + path;
+        public virtual string HightouchURL(string host, string path) => "https://" + host + path;
 
         public virtual async Task<Settings?> Settings()
         {
-            string settingsURL = SegmentURL(_cdnHost, "/projects/" + _apiKey + "/settings");
+            string settingsURL = HightouchURL(_cdnHost, "/projects/" + _apiKey + "/settings");
             Settings? result = null;
             try
             {
@@ -96,7 +96,7 @@ namespace Hightouch.Events.Utilities
 
         public virtual async Task<bool> Upload(byte[] data)
         {
-            string uploadURL = SegmentURL(_apiHost, "/b");
+            string uploadURL = HightouchURL(_apiHost, "/b");
             try
             {
                 Response response = await DoPost(uploadURL, data);

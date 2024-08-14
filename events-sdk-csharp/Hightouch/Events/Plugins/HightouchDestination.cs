@@ -5,7 +5,7 @@ using Segment.Sovran;
 namespace Hightouch.Events.Plugins
 {
     /// <summary>
-    /// Segment Analytics plugin that is used to send events to Segment's tracking api, in the choice of region.
+    /// Hightouch Events plugin that is used to send events to Hightouch's tracking api, in the choice of region.
     /// How it works:
     /// <list type="number">
     /// <item><description>Plugin receives <c>apiHost</c> settings</description></item>
@@ -13,11 +13,11 @@ namespace Hightouch.Events.Plugins
     /// <item><description>We upload events on a dedicated thread using the batch api</description></item>
     /// </list>
     /// </summary>
-    public class SegmentDestination : DestinationPlugin, ISubscriber
+    public class HightouchDestination : DestinationPlugin, ISubscriber
     {
         private IEventPipeline _pipeline = null;
 
-        public override string Key => "Segment.io";
+        public override string Key => "Hightouch";
 
         internal const string ApiHost = "apiHost";
 
@@ -76,8 +76,8 @@ namespace Hightouch.Events.Plugins
         {
             base.Update(settings, type);
 
-            JsonObject segmentInfo = settings.Integrations?.GetJsonObject(Key);
-            string apiHost = segmentInfo?.GetString(ApiHost);
+            JsonObject hightouchInfo = settings.Integrations?.GetJsonObject(Key);
+            string apiHost = hightouchInfo?.GetString(ApiHost);
             if (apiHost != null && _pipeline != null)
             {
                 _pipeline.ApiHost = apiHost;

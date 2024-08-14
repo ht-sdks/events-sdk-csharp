@@ -31,7 +31,7 @@ namespace Tests.Utilities
             };
             _configuration = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 defaultSettings: _settings
             );

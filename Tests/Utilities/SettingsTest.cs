@@ -38,7 +38,7 @@ namespace Tests.Utilities
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new MockStorageProvider(_storage),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 httpClientProvider: new MockHttpClientProvider(mockHttpClient)
             );

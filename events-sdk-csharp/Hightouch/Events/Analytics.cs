@@ -231,9 +231,9 @@ namespace Hightouch.Events
             // check settings over the network
             AnalyticsScope.Launch(AnalyticsDispatcher, async () =>
             {
-                if (Configuration.AutoAddSegmentDestination)
+                if (Configuration.AutoAddHightouchDestination)
                 {
-                    Add(new SegmentDestination());
+                    Add(new HightouchDestination());
                 }
 
                 await CheckSettings();

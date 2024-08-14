@@ -16,7 +16,7 @@ namespace Tests.Policies
         {
             var config = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false
+                autoAddHightouchDestination: false
             );
 
             _policy = new FrequencyFlushPolicy(1000);

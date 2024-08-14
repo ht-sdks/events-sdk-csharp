@@ -19,7 +19,7 @@ namespace UnitySample
                     s_instance = FindObjectOfType<T>();
                     if (s_instance == null)
                     {
-                        s_instance = new GameObject("Segment Singleton").AddComponent<T>();
+                        s_instance = new GameObject("Hightouch Singleton").AddComponent<T>();
                         DontDestroyOnLoad(s_instance.gameObject);
                     }
                 }
