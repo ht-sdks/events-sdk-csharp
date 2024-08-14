@@ -296,7 +296,6 @@ namespace Hightouch.Events
         /// The alias method is used to merge two user identities, effectively connecting two sets of
         /// user data as one. This is an advanced method, but it is required to manage user identities
         /// successfully in some of our integrations.
-        /// <see href="https://segment.com/docs/tracking-api/alias/">Alias Documentation</see>
         /// </summary>
         /// <param name="newId">The new ID you want to alias the existing ID to. The existing ID will be either
         /// the previousId if you have called identify, or the anonymous ID.

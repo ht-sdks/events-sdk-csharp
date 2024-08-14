@@ -10,7 +10,7 @@ namespace Hightouch.Events
     /// Stores state related to the analytics system:
     ///     <list type="bullet">
     ///         <item><description>configuration used to initialize the client</description></item>
-    ///         <item><description>segment settings as a json map</description></item>
+    ///         <item><description>hightouch settings as a json map</description></item>
     ///         <item><description>running state indicating the system has received settings</description></item>
     ///     </list>
     /// </summary>

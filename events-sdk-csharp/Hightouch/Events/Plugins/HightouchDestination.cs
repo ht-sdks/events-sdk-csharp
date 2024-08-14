@@ -9,7 +9,7 @@ namespace Hightouch.Events.Plugins
     /// How it works:
     /// <list type="number">
     /// <item><description>Plugin receives <c>apiHost</c> settings</description></item>
-    /// <item><description>We store events into a file with the batch api format <see href="https://segment.com/docs/connections/sources/catalog/libraries/server/http-api/#batch" /></description></item>
+    /// <item><description>We store events into a file with the batch api format</description></item>
     /// <item><description>We upload events on a dedicated thread using the batch api</description></item>
     /// </list>
     /// </summary>

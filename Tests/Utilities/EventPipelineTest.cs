@@ -162,10 +162,10 @@ namespace Tests.Utilities
 
             // since we set autoAddHightouchDestination = false, we need to manually add it to analytics.
             // we need a mocked HightouchDestination so we can redirect Flush call to this eventPipeline.
-            var segmentDestination = new Mock<HightouchDestination>();
-            segmentDestination.Setup(o => o.Flush()).Callback(() => eventPipeline.Flush());
-            segmentDestination.Setup(o => o.Analytics).Returns(_analytics);
-            _analytics.Add(segmentDestination.Object);
+            var hightouchDestination = new Mock<HightouchDestination>();
+            hightouchDestination.Setup(o => o.Flush()).Callback(() => eventPipeline.Flush());
+            hightouchDestination.Setup(o => o.Analytics).Returns(_analytics);
+            _analytics.Add(hightouchDestination.Object);
 
             eventPipeline = new EventPipeline(
                 _analytics,

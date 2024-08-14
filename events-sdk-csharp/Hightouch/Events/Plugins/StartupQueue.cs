@@ -28,7 +28,7 @@ namespace Hightouch.Events.Plugins
         {
             if (!_running.Get() && incomingEvent != null)
             {
-                Analytics.Logger.Log(LogLevel.Debug, message: "SegmentStartupQueue queueing event");
+                Analytics.Logger.Log(LogLevel.Debug, message: "HightouchStartupQueue queueing event");
                 // The timeline hasn't started, we need to start queueing so we don't lose events
                 if (_queuedEvents.Count >= s_maxSize)
                 {
