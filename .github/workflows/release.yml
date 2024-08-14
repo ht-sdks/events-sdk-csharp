@@ -3,8 +3,8 @@ name: Release
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
-      - '[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+'
+      - "[0-9]+.[0-9]+.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
 
 jobs:
   release:
@@ -13,7 +13,7 @@ jobs:
     environment: deployment
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Get tag
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
@@ -25,12 +25,13 @@ jobs:
             exit 1
           } fi
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             3.1.x
             5.0.x
             6.0.x
+            8.0.x
       - name: Restore cache
         uses: actions/cache@v3
         with:
