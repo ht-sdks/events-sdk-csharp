@@ -3,8 +3,6 @@ name: Feature request
 about: Suggest an idea for this project
 title: ''
 labels: triage
-assignees: wenxi-zeng
-
 ---
 
 **Is your feature request related to a problem? Please describe.**
