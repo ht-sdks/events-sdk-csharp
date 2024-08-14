@@ -17,9 +17,9 @@ namespace Hightouch.Events.Utilities
     /// </summary>
     public abstract class HTTPClient
     {
-        internal const string DefaultAPIHost = "us-east-1.hightouch-events.com";
+        internal const string DefaultAPIHost = "https://us-east-1.hightouch-events.com";
 
-        internal const string DefaultCdnHost = "cdn-settings.hightouch-events.com";
+        internal const string DefaultCdnHost = "https://cdn-settings.hightouch-events.com";
 
         private readonly string _apiKey;
 
@@ -65,9 +65,9 @@ namespace Hightouch.Events.Utilities
         /// </code>
         /// </summary>
         /// <param name="host">cdnHost or apiHost</param>
-        /// <param name="path">Path to Hightouch's /settings endpoint or /b endpoints</param>
+        /// <param name="path">Path to Hightouch's /settings endpoint or /v1/batch endpoints</param>
         /// <returns>Formatted url</returns>
-        public virtual string HightouchURL(string host, string path) => "https://" + host + path;
+        public virtual string HightouchURL(string host, string path) => host + path;
 
         public virtual async Task<Settings?> Settings()
         {
@@ -96,7 +96,7 @@ namespace Hightouch.Events.Utilities
 
         public virtual async Task<bool> Upload(byte[] data)
         {
-            string uploadURL = HightouchURL(_apiHost, "/b");
+            string uploadURL = HightouchURL(_apiHost, "/v1/batch");
             try
             {
                 Response response = await DoPost(uploadURL, data);
@@ -220,7 +220,7 @@ namespace Hightouch.Events.Utilities
                 request.Content = streamContent;
 
                 HttpResponseMessage response = await _httpClient.SendAsync(request);
-                var result = new Response {StatusCode = (int)response.StatusCode};
+                var result = new Response { StatusCode = (int)response.StatusCode };
                 response.Dispose();
 
                 return result;

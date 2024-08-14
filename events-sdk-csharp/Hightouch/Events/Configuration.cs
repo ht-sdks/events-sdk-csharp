@@ -26,7 +26,8 @@ namespace Hightouch.Events
         public bool UseSynchronizeDispatcher { get; }
 
         [Obsolete("Please use AnalyticsErrorHandler instead")]
-        public ICoroutineExceptionHandler ExceptionHandler {
+        public ICoroutineExceptionHandler ExceptionHandler
+        {
             get
             {
                 return AnalyticsErrorHandler;
@@ -56,8 +57,8 @@ namespace Hightouch.Events
         /// <param name="defaultSettings">settings object that will be used as fallback in case of network failure, defaults to empty</param>
         /// <param name="autoAddHightouchDestination">automatically add HightouchDestination plugin, defaults to <c>true</c></param>
         /// <param name="useSynchronizeDispatcher">forcing everything to run synchronously, used for unit tests </param>
-        /// <param name="apiHost">set a default apiHost to which Hightouch sends events, defaults to <c>us-east-1.hightouch-events.com</c></param>
-        /// <param name="cdnHost">set a default cdnHost to which Hightouch fetches settings, defaults to <c>us-east-1.hightouch-events.com</c></param>
+        /// <param name="apiHost">set a default apiHost to which Hightouch sends events, defaults to <c>https://us-east-1.hightouch-events.com</c></param>
+        /// <param name="cdnHost">set a default cdnHost to which Hightouch fetches settings, defaults to <c>https://cdn-settings.hightouch-events.com</c></param>
         /// <param name="analyticsErrorHandler">set an error handler to handle errors happened in analytics</param>
         /// <param name="storageProvider">set a storage provider to tell the analytics where to store your data:
         ///     <list type="bullet">
