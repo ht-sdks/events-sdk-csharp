@@ -40,9 +40,7 @@
   - [Compatibility](#compatibility)
   - [Changelog](#changelog)
   - [Contributing](#contributing)
-  - [Integrating with Segment](#integrating-with-segment)
   - [Code of Conduct](#code-of-conduct)
-  - [License](#license)
 
 
 The hassle-free way to add Segment analytics to your .Net app (Unity/Xamarin/.Net). Analytics helps you measure your users, product, and business. It unlocks insights into your app's funnel, core business metrics, and whether you have product-market fit.
@@ -77,9 +75,9 @@ To get started with the events-sdk-csharp library:
     ```
     dotnet add package Hightouch.Events.CSharp --version <LATEST_VERSION>
     ```
-    For Unity, it is distributed via OpenUPM. Read more about it [here](https://openupm.com/packages/com.segment.analytics.csharp/?subPage=readme).
+    For Unity, it is distributed via OpenUPM. Read more about it [here](https://openupm.com/packages/com.hightouch.events.csharp/?subPage=readme).
     ```
-   openupm add com.segment.analytics.csharp
+   openupm add com.hightouch.events.csharp
    ```
 3. Initialize and configure the client.
 
@@ -612,35 +610,6 @@ This library targets `.NET Standard 1.3` and `.NET Standard 2.0`. Checkout [here
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
-## Integrating with Segment
-
-Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
-
 ## Code of Conduct
 
 Before contributing, please also see our [code of conduct](CODE_OF_CONDUCT.md).
-
-## License
-```
-MIT License
-
-Copyright (c) 2021 Segment
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
