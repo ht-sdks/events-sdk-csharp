@@ -24,7 +24,7 @@ namespace Tests.Utilities
         public SettingsTest()
         {
             _settings = JsonUtility.FromJson<Settings?>(
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
 
             var mockHttpClient = new Mock<HTTPClient>(null, null, null);
             mockHttpClient

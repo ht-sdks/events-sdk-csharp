@@ -19,7 +19,7 @@ namespace Tests.Plugins
         public DestinationMetadataPluginTest()
         {
             _settings = JsonUtility.FromJson<Settings>(
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
 
             var mockHttpClient = new Mock<HTTPClient>(null, null, null);
             mockHttpClient
@@ -83,7 +83,7 @@ namespace Tests.Plugins
             {
                 Integrations = new JsonObject
                 {
-                    ["Segment.io"] = new JsonObject
+                    ["Hightouch.io"] = new JsonObject
                     {
                         ["unbundledIntegrations"] = new JsonArray
                         {
@@ -117,7 +117,7 @@ namespace Tests.Plugins
                     // IntegrationNotInBundled
                     ["b"] = "test",
                     ["c"] = "test",
-                    ["Segment.io"] = new JsonObject
+                    ["Hightouch.io"] = new JsonObject
                     {
                         ["unbundledIntegrations"] = new JsonArray
                         {

@@ -4,7 +4,7 @@ using Segment.Serialization;
 
 namespace Hightouch.Events.Plugins
 {
-    public class DestinationMetadataPlugin: Plugin
+    public class DestinationMetadataPlugin : Plugin
     {
         public override PluginType Type => PluginType.Enrichment;
 
@@ -33,7 +33,7 @@ namespace Hightouch.Events.Plugins
             // All active integrations, not in `bundled` are put in `unbundled`
             foreach (string integration in _settings.Integrations.Keys)
             {
-                if (integration != "Segment.io" && !bundled.Contains(integration))
+                if (integration != "Hightouch.io" && !bundled.Contains(integration))
                 {
                     unbundled.Add(integration);
                 }
@@ -41,7 +41,7 @@ namespace Hightouch.Events.Plugins
 
             // All unbundledIntegrations not in `bundled` are put in `unbundled`
             JsonArray unbundledIntegrations =
-                _settings.Integrations?.GetJsonObject("Segment.io")?.GetJsonArray("unbundledIntegrations") ??
+                _settings.Integrations?.GetJsonObject("Hightouch.io")?.GetJsonArray("unbundledIntegrations") ??
                 new JsonArray();
             foreach (JsonElement integration in unbundledIntegrations)
             {

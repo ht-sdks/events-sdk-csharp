@@ -16,13 +16,13 @@ namespace Hightouch.Events
         internal IDictionary<PluginType, Mediator> _plugins;
 
         public Timeline() => _plugins = new ConcurrentDictionary<PluginType, Mediator>
-            {
-                [PluginType.Before] = new Mediator(),
-                [PluginType.Enrichment] = new Mediator(),
-                [PluginType.Destination] = new Mediator(),
-                [PluginType.After] = new Mediator(),
-                [PluginType.Utility] = new Mediator()
-            };
+        {
+            [PluginType.Before] = new Mediator(),
+            [PluginType.Enrichment] = new Mediator(),
+            [PluginType.Destination] = new Mediator(),
+            [PluginType.After] = new Mediator(),
+            [PluginType.Utility] = new Mediator()
+        };
 
         /// <summary>
         /// initiate the event's lifecycle
@@ -169,7 +169,7 @@ namespace Hightouch.Events
                 // Check for nullability because CurrentState returns default(IState) which could make the .Count throw a NullReferenceException
                 if (system._initializedPlugins != null && system._initializedPlugins.Count > 0)
                 {
-                    await analytics.Store.Dispatch<System.AddInitializedPluginAction, System>(new System.AddInitializedPluginAction(new HashSet<int>{plugin.GetHashCode()}));
+                    await analytics.Store.Dispatch<System.AddInitializedPluginAction, System>(new System.AddInitializedPluginAction(new HashSet<int> { plugin.GetHashCode() }));
                     plugin.Update(settings, UpdateType.Initial);
                 }
             });

@@ -20,7 +20,7 @@ namespace Tests
         public EventsTest()
         {
             _settings = JsonUtility.FromJson<Settings?>(
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
 
             var mockHttpClient = new Mock<HTTPClient>(null, null, null);
             mockHttpClient
@@ -100,7 +100,7 @@ namespace Tests
             _plugin.Setup(o => o.Track(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Track(expectedEvent, (FooBar) null);
+            _analytics.Track(expectedEvent, (FooBar)null);
 
             Assert.NotEmpty(actual);
             Assert.True(actual[0].Properties.Count == 0);
@@ -189,7 +189,7 @@ namespace Tests
             string expectedUserId = _analytics.UserId();
 
             _analytics.Add(_plugin.Object);
-            _analytics.Identify((JsonObject) null);
+            _analytics.Identify((JsonObject)null);
 
             string actualUserId = _analytics.UserId();
 
@@ -224,7 +224,7 @@ namespace Tests
             _plugin.Setup(o => o.Identify(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Identify(expectedUserId, (FooBar) null);
+            _analytics.Identify(expectedUserId, (FooBar)null);
 
             string actualUserId = _analytics.UserId();
 
@@ -241,7 +241,7 @@ namespace Tests
             _plugin.Setup(o => o.Identify(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Identify(expectedUserId, (FooBar) null);
+            _analytics.Identify(expectedUserId, (FooBar)null);
             string actualUserId = _analytics.UserId();
 
             Assert.NotEmpty(actual);
@@ -274,7 +274,7 @@ namespace Tests
             string expectedUserId = _analytics.UserId();
 
             _analytics.Add(_plugin.Object);
-            _analytics.Identify((FooBar) null);
+            _analytics.Identify((FooBar)null);
             string actualUserId = _analytics.UserId();
 
             Assert.NotEmpty(actual);
@@ -361,7 +361,7 @@ namespace Tests
             _plugin.Setup(o => o.Screen(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Screen(null, (FooBar) null, null);
+            _analytics.Screen(null, (FooBar)null, null);
 
             Assert.NotEmpty(actual);
             Assert.True(actual[0].Properties.Count == 0);
@@ -433,7 +433,7 @@ namespace Tests
             _plugin.Setup(o => o.Page(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Page(null, (FooBar) null, null);
+            _analytics.Page(null, (FooBar)null, null);
 
             Assert.NotEmpty(actual);
             Assert.True(actual[0].Properties.Count == 0);
@@ -500,7 +500,7 @@ namespace Tests
             _plugin.Setup(o => o.Group(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Group(expectedGroupId, (FooBar) null);
+            _analytics.Group(expectedGroupId, (FooBar)null);
 
             Assert.NotEmpty(actual);
             Assert.True(actual[0].Traits.Count == 0);

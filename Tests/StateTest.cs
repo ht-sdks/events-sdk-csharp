@@ -42,7 +42,7 @@ namespace Tests
         public void TestSystemDefaultState()
         {
             string settingsStr =
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}";
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}";
             Settings settings = JsonUtility.FromJson<Settings>(settingsStr);
             _storage
                 .Setup(o => o.Read(It.IsAny<StorageConstants>()))

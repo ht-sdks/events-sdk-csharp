@@ -1,3 +1,4 @@
+using System;
 using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Segment.Sovran;
@@ -17,7 +18,7 @@ namespace Hightouch.Events.Plugins
     {
         private IEventPipeline _pipeline = null;
 
-        public override string Key => "Hightouch";
+        public override string Key => "Hightouch.io";
 
         internal const string ApiHost = "apiHost";
 
