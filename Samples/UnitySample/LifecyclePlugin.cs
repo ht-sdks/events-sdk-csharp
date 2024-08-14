@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Segment.Analytics;
+using Hightouch.Events;
 using Segment.Serialization;
 using UnityEngine;
 

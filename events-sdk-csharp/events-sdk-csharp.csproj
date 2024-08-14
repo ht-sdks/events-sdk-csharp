@@ -26,16 +26,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Segment\" />
-    <None Remove="Segment\Aanalytics\" />
-    <None Remove="Segment\Aanalytics\Plugins\" />
-    <None Remove="Segment\Aanalytics\Utilities\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Segment\" />
-    <Folder Include="Segment\Analytics\" />
-    <Folder Include="Segment\Analytics\Plugins\" />
-    <Folder Include="Segment\Analytics\Utilities\" />
+    <Folder Include="Hightouch\" />
+    <Folder Include="Hightouch\Events\" />
+    <Folder Include="Hightouch\Events\Plugins\" />
+    <Folder Include="Hightouch\Events\Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Coroutine.NET" Version="1.4.0" />

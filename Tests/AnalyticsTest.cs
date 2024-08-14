@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Plugins;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Plugins;
+using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Tests.Utils;
 using Xunit;
-using Configuration = Segment.Analytics.Configuration;
+using Configuration = Hightouch.Events.Configuration;
 
 namespace Tests
 {
@@ -140,7 +140,7 @@ namespace Tests
         [Fact]
         public void TestVersion()
         {
-            Assert.Equal(Version.SegmentVersion, _analytics.Version);
+            Assert.Equal(Version.HightouchVersion, _analytics.Version);
         }
 
         [Fact]

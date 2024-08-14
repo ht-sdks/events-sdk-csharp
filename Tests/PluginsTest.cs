@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Plugins;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Plugins;
+using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Tests.Utils;
 using Xunit;
@@ -129,7 +129,7 @@ namespace Tests
             plugin.Setup(o => o.Screen(Moq.Capture.In(screen))).Returns((ScreenEvent a) => {return a;}).Verifiable();
             var track = new List<TrackEvent>();
             plugin.Setup(o => o.Track(Moq.Capture.In(track))).Returns((TrackEvent a) => {return a;}).Verifiable();
-            
+
             _analytics.Add(plugin.Object);
             _analytics.ManuallyEnableDestination(plugin.Object);
 
@@ -156,7 +156,7 @@ namespace Tests
             _analytics.Track("testtrack");
             plugin.Verify(o => o.Track(It.IsAny<TrackEvent>()), Times.Exactly(1));
             Assert.Equal("testtrack", track[0].Event);
-            
+
         }
     }
 }

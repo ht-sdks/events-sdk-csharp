@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using Segment.Analytics.Utilities;
+using Hightouch.Events.Utilities;
 using UnityEngine.Networking;
 
 namespace UnitySample

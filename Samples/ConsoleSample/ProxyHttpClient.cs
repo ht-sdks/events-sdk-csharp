@@ -1,4 +1,4 @@
-using Segment.Analytics.Utilities;
+using Hightouch.Events.Utilities;
 
 namespace ConsoleSample
 {

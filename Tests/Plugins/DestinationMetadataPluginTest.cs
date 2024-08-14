@@ -1,7 +1,7 @@
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Plugins;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Plugins;
+using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Tests.Utils;
 using Xunit;

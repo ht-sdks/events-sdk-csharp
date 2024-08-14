@@ -1,5 +1,5 @@
 ﻿using System;
-using Segment.Analytics;
+using Hightouch.Events;
 using Segment.Serialization;
 using Xamarin.Forms;
 

@@ -2,7 +2,7 @@
 
 using System;
 using ConsoleSample;
-using Segment.Analytics;
+using Hightouch.Events;
 
 
 var configuration = new Configuration("YOUR WRITE KEY",

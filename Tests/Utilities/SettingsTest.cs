@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Segment.Sovran;
 using Tests.Utils;
@@ -44,7 +44,7 @@ namespace Tests.Utilities
             );
             _analytics = new Analytics(config);
         }
-            
+
         [Fact]
         public async Task PluginUpdatesWithInitalOnlyOnce()
         {
@@ -61,7 +61,7 @@ namespace Tests.Utilities
             await _analytics.CheckSettings();
             plugin.Verify(p => p.Update(It.IsAny<Settings>(), UpdateType.Initial), Times.Once);
             plugin.Verify(p => p.Update(It.IsAny<Settings>(), UpdateType.Refresh), Times.Once);
-            Segment.Analytics.System system = await _analytics.Store.CurrentState<Segment.Analytics.System>();
+            Hightouch.Events.System system = await _analytics.Store.CurrentState<Hightouch.Events.System>();
             Assert.Contains(plugin.Object.GetHashCode(), system._initializedPlugins);
 
             // readd plugin (why would you do this?)

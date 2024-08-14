@@ -2,7 +2,7 @@ using AspNetMvcSample.Models;
 using AspNetMvcSample.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Segment.Analytics;
+using Hightouch.Events;
 using Segment.Serialization;
 
 namespace AspNetMvcSample.Controllers

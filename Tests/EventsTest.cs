@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Tests.Utils;
 using Xunit;

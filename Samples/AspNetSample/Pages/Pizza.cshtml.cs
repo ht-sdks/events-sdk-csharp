@@ -6,7 +6,7 @@ using AspNetSample.Pages.Models;
 using AspNetSample.Pages.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Segment.Analytics;
+using Hightouch.Events;
 using Segment.Serialization;
 
 namespace AspNetSample.Pages

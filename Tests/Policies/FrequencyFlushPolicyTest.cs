@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Policies;
+using Hightouch.Events;
+using Hightouch.Events.Policies;
 using Segment.Concurrent;
 using Xunit;
 

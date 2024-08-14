@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AspNetMvcSample.Models;
 using AspNetMvcSample.Services;
-using Segment.Analytics;
+using Hightouch.Events;
 
 namespace AspNetMvcSample.Controllers
 {

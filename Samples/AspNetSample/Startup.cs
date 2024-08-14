@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
 
 namespace AspNetSample
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Segment.Analytics.Utilities;
+using Hightouch.Events.Utilities;
 using Xunit;
 
 namespace Tests.Utilities

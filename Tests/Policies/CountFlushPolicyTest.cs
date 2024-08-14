@@ -1,5 +1,5 @@
-using Segment.Analytics;
-using Segment.Analytics.Policies;
+using Hightouch.Events;
+using Hightouch.Events.Policies;
 using Xunit;
 
 namespace Tests.Policies

@@ -1,7 +1,7 @@
 using System;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
 using Segment.Serialization;
 using Segment.Sovran;
 using Xunit;
@@ -48,7 +48,7 @@ namespace Tests.Utilities
                 .Setup(o => o.Read(It.IsAny<StorageConstants>()))
                 .Throws(exception);
 
-            Segment.Analytics.System.DefaultState(_configuration, _storage.Object);
+            Hightouch.Events.System.DefaultState(_configuration, _storage.Object);
 
             logger.Verify(o => o.Log(LogLevel.Error, exception, It.IsAny<string>()), Times.Exactly(1));
         }

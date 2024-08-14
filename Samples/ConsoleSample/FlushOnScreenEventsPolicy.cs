@@ -1,5 +1,5 @@
-using Segment.Analytics;
-using Segment.Analytics.Policies;
+using Hightouch.Events;
+using Hightouch.Events.Policies;
 
 namespace ConsoleSample
 {

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Segment.Analytics;
+using Hightouch.Events;
 
 namespace AspNetSample
 {
