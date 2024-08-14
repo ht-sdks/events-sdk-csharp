@@ -63,7 +63,7 @@ namespace Hightouch.Events.Plugins
             base.Configure(analytics);
 
             // Add DestinationMetadata enrichment plugin
-            Add(new DestinationMetadataPlugin());
+            // Add(new DestinationMetadataPlugin());
 
             _pipeline = analytics.Configuration.EventPipelineProvider.Create(analytics, Key);
 

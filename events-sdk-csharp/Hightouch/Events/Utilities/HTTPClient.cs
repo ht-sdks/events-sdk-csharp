@@ -173,7 +173,6 @@ namespace Hightouch.Events.Utilities
 
     public class DefaultHTTPClient : HTTPClient
     {
-
         private readonly HttpClient _httpClient;
 
         public DefaultHTTPClient(string apiKey, string apiHost = null, string cdnHost = null) : base(apiKey, apiHost, cdnHost)
@@ -213,6 +212,7 @@ namespace Hightouch.Events.Utilities
                 ms.Position = 0;
                 StreamContent streamContent = new StreamContent(ms);
                 streamContent.Headers.Add("Content-Encoding", "gzip");
+                streamContent.Headers.Add("Content-Type", "application/json");
 
                 var request = new HttpRequestMessage(HttpMethod.Post, url);
                 request.Headers.Add("Connection", "close");
