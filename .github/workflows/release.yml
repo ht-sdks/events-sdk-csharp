@@ -24,7 +24,9 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-      - run: dotnet pack events-sdk-csharp
+      - run: dotnet pack
+        working-directory: events-sdk-csharp
 
       - name: Publish
-        run: dotnet nuget push events-sdk-csharp/nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        working-directory: events-sdk-csharp
