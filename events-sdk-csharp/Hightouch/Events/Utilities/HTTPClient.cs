@@ -71,27 +71,36 @@ namespace Hightouch.Events.Utilities
 
         public virtual async Task<Settings?> Settings()
         {
-            string settingsURL = HightouchURL(_cdnHost, "/projects/" + _apiKey + "/settings");
-            Settings? result = null;
-            try
-            {
-                Response response = await DoGet(settingsURL);
-                if (!response.IsSuccessStatusCode)
-                {
-                    AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnexpectedHttpCode, message: "Error " + response.StatusCode + " getting from settings url");
-                }
-                else
-                {
-                    string json = response.Content;
-                    result = JsonUtility.FromJson<Settings>(json);
-                }
-            }
-            catch (Exception e)
-            {
-                AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnknown, e, "Unknown network error when getting from settings url");
-            }
+            // string settingsURL = HightouchURL(_cdnHost, "/projects/" + _apiKey + "/settings");
+            // Settings? result = null;
+            // try
+            // {
+            //     Response response = await DoGet(settingsURL);
+            //     if (!response.IsSuccessStatusCode)
+            //     {
+            //         AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnexpectedHttpCode, message: "Error " + response.StatusCode + " getting from settings url");
+            //     }
+            //     else
+            //     {
+            //         string json = response.Content;
+            //         result = JsonUtility.FromJson<Settings>(json);
+            //     }
+            // }
+            // catch (Exception e)
+            // {
+            //     AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnknown, e, "Unknown network error when getting from settings url");
+            // }
+            //
+            // return result;
 
-            return result;
+            // ** since HT Events doesn't support the settings endpoint, we just mock the response which enables the `HightouchDestination` plugin
+            return new Settings
+            {
+                Integrations = new JsonObject
+                {
+                    ["Hightouch.io"] = new JsonObject()
+                },
+            };
         }
 
         public virtual async Task<bool> Upload(byte[] data)
