@@ -10,14 +10,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        dotnet: ["3.1.x", "5.0.x", "6.0.x"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: |
+            3.1.x
+            5.0.x
+            6.0.x
       - run: dotnet build
       - run: dotnet test
