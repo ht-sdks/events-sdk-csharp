@@ -26,7 +26,7 @@ namespace AspNetSample
         public void ConfigureServices(IServiceCollection services)
         {
             // use `InMemoryStorageProvider` to make Analytics stateless
-            var configuration = new Configuration("YOUR WRITE KEY",
+            var configuration = new Configuration("WRITE_KEY",
                 flushAt: 1,
                 flushInterval: 10,
                 storageProvider: new InMemoryStorageProvider());
