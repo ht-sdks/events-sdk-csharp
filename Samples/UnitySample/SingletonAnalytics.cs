@@ -1,6 +1,6 @@
 using System;
 using Hightouch.Events;
-using Segment.Concurrent;
+using Hightouch.Events.Concurrent;
 using UnityEngine;
 
 namespace UnitySample

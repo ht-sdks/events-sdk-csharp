@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using global::System.Threading.Tasks;
 using Hightouch.Events.Utilities;
-using Segment.Concurrent;
-using Segment.Serialization;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events
 {
@@ -16,10 +16,12 @@ namespace Hightouch.Events
 
     public partial class Analytics
     {
-        internal async Task Update(Settings settings) {
+        internal async Task Update(Settings settings)
+        {
             System systemState = await Store.CurrentState<System>();
             HashSet<int> initializedPlugins = new HashSet<int>();
-            Timeline.Apply(plugin => {
+            Timeline.Apply(plugin =>
+            {
                 UpdateType type = systemState._initializedPlugins.Contains(plugin.GetHashCode()) ? UpdateType.Refresh : UpdateType.Initial;
                 plugin.Update(settings, type);
                 initializedPlugins.Add(plugin.GetHashCode());

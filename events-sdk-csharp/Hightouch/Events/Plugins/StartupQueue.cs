@@ -1,7 +1,7 @@
 using global::System.Collections.Concurrent;
 using Hightouch.Events.Utilities;
-using Segment.Concurrent;
-using Segment.Sovran;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Sovran;
 
 namespace Hightouch.Events.Plugins
 {

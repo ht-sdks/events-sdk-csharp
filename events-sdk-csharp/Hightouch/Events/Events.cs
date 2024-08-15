@@ -1,5 +1,5 @@
-using global::System.Runtime.Serialization;
-using Segment.Serialization;
+using System.Runtime.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events
 {

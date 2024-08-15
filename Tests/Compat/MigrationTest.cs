@@ -3,7 +3,7 @@ using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Utilities;
 using Hightouch.Events.Compat;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 using Tests.Utils;
 using Xunit;
 

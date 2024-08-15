@@ -4,9 +4,9 @@ using global::System.Linq;
 using global::System.Text;
 using global::System.Threading;
 using global::System.Threading.Tasks;
-using Segment.Concurrent;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 
 namespace Hightouch.Events.Utilities
 {

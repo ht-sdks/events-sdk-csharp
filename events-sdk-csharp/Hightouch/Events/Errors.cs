@@ -1,6 +1,6 @@
 using System;
 using Hightouch.Events.Utilities;
-using Segment.Concurrent;
+using Hightouch.Events.Concurrent;
 
 namespace Hightouch.Events
 {
@@ -94,7 +94,7 @@ namespace Hightouch.Events
         PayloadInvalid
     }
 
-    public interface IAnalyticsErrorHandler : ICoroutineExceptionHandler {}
+    public interface IAnalyticsErrorHandler : ICoroutineExceptionHandler { }
 
     internal class AnalyticsErrorHandlerAdapter : IAnalyticsErrorHandler
     {

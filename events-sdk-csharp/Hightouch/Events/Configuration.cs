@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Hightouch.Events.Policies;
 using Hightouch.Events.Utilities;
-using Segment.Concurrent;
-using Segment.Serialization;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events
 {

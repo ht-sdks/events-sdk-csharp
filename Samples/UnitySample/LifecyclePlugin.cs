@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hightouch.Events;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 using UnityEngine;
 
 namespace UnitySample
@@ -56,7 +56,7 @@ namespace UnitySample
     /// </summary>
     public class Lifecycle : Singleton<Lifecycle>, IObservable<Lifecycle.State>
     {
-        // use Segment's ConcurrentList to avoid modification during enumeration
+        // use Hightouch's ConcurrentList to avoid modification during enumeration
         // or you have to make a copy for iterating the observers.
         private readonly IList<IObserver<State>> _observers = new ConcurrentList<IObserver<State>>();
 
@@ -71,7 +71,8 @@ namespace UnitySample
             {
                 NotifyObservers(new State
                 {
-                    Message = "Application Installed", Properties = new JsonObject {["version"] = currentVersion}
+                    Message = "Application Installed",
+                    Properties = new JsonObject { ["version"] = currentVersion }
                 });
             }
             else if (previousVersion != currentVersion)
@@ -81,7 +82,8 @@ namespace UnitySample
                     Message = "Application Updated",
                     Properties = new JsonObject
                     {
-                        ["previous_version"] = previousVersion, ["version"] = currentVersion
+                        ["previous_version"] = previousVersion,
+                        ["version"] = currentVersion
                     }
                 });
             }
@@ -93,14 +95,14 @@ namespace UnitySample
         private void Start()
         {
             CheckVersion();
-            NotifyObservers(new State {Message = "Application Opened"});
+            NotifyObservers(new State { Message = "Application Opened" });
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
             if (pauseStatus)
             {
-                NotifyObservers(new State {Message = "Application Backgrounded"});
+                NotifyObservers(new State { Message = "Application Backgrounded" });
             }
         }
 

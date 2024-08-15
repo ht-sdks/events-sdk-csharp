@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 using Tests.Utils;
 using Xunit;
 

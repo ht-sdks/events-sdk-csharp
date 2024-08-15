@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using global::System;
 using Hightouch.Events.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 
 namespace Hightouch.Events
 {

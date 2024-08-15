@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Utilities;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace Tests.Utils
 {

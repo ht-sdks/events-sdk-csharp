@@ -1,15 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using global::System;
-using global::System.Runtime.Serialization;
-using global::System.Threading.Tasks;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Hightouch.Events.Plugins;
 using Hightouch.Events.Policies;
 using Hightouch.Events.Utilities;
-using Segment.Concurrent;
-using Segment.Serialization;
-using Segment.Sovran;
-using JsonUtility = Segment.Serialization.JsonUtility;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Sovran;
 
 namespace Hightouch.Events
 {

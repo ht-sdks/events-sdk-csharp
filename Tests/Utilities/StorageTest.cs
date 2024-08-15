@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 using Xunit;
 
 namespace Tests.Utilities
@@ -24,7 +24,7 @@ namespace Tests.Utilities
                 autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true
             );
-            _analytics = new Mock<Analytics>(config){CallBase = true};
+            _analytics = new Mock<Analytics>(config) { CallBase = true };
         }
 
         [Fact]

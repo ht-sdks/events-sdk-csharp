@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events.Plugins
 {

@@ -1,7 +1,7 @@
 using global::System;
 using global::System.Collections.Generic;
 using Hightouch.Events.Utilities;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events
 {

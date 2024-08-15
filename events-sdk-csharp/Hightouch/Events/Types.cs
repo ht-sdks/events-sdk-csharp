@@ -1,5 +1,5 @@
 using global::System;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events
 {

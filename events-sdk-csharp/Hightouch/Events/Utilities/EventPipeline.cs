@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using global::System;
 using global::System.Linq;
 using Hightouch.Events.Policies;
-using Segment.Concurrent;
-using Segment.Serialization;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events.Utilities
 {
-    public class EventPipeline: IEventPipeline
+    public class EventPipeline : IEventPipeline
     {
         private readonly Analytics _analytics;
 

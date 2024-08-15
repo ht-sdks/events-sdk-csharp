@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events.Compat
 {
@@ -20,7 +20,7 @@ namespace Hightouch.Events.Compat
         [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]
         public static void Track(this Analytics analytics, string userId, string eventName)
         {
-            analytics.Track(eventName, new JsonObject() {{"userId", userId}});
+            analytics.Track(eventName, new JsonObject() { { "userId", userId } });
         }
 
         [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]
@@ -39,7 +39,7 @@ namespace Hightouch.Events.Compat
         [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]
         public static void Screen(this Analytics analytics, string userId, string eventName)
         {
-            analytics.Screen(eventName, new JsonObject() {{"userId", userId}});
+            analytics.Screen(eventName, new JsonObject() { { "userId", userId } });
         }
 
         [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]
@@ -58,7 +58,7 @@ namespace Hightouch.Events.Compat
         [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]
         public static void Page(this Analytics analytics, string userId, string title)
         {
-            analytics.Page(title, new JsonObject() {{"userId", userId}});
+            analytics.Page(title, new JsonObject() { { "userId", userId } });
         }
 
         [Obsolete("This should only be used if migrating from Analytics.NET or Analytics.Xamarin")]

@@ -4,8 +4,8 @@ using global::System.Collections.Generic;
 using global::System.IO;
 using global::System.Threading;
 using global::System.Threading.Tasks;
-using Segment.Concurrent;
-using Segment.Serialization;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events.Utilities
 {

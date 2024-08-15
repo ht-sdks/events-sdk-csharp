@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Policies;
-using Segment.Concurrent;
+using Hightouch.Events.Concurrent;
 using Xunit;
 
 namespace Tests.Policies
@@ -20,7 +20,7 @@ namespace Tests.Policies
             );
 
             _policy = new FrequencyFlushPolicy(1000);
-            _analytics = new Mock<Analytics>(config) {CallBase = true};
+            _analytics = new Mock<Analytics>(config) { CallBase = true };
             _analytics.Setup(o => o.AnalyticsScope).Returns(new Scope());
             _analytics.Setup(o => o.FileIODispatcher)
                 .Returns(new Dispatcher(new LimitedConcurrencyLevelTaskScheduler(1)));

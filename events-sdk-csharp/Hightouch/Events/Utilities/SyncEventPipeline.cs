@@ -3,8 +3,8 @@ using System.Threading;
 using global::System;
 using global::System.Linq;
 using Hightouch.Events.Policies;
-using Segment.Concurrent;
-using Segment.Serialization;
+using Hightouch.Events.Concurrent;
+using Hightouch.Events.Serialization;
 
 namespace Hightouch.Events.Utilities
 {
@@ -17,10 +17,10 @@ namespace Hightouch.Events.Utilities
         {
             _semaphore = semaphore;
         }
-   }
+    }
 
 
-    public class SyncEventPipeline: IEventPipeline
+    public class SyncEventPipeline : IEventPipeline
     {
         private readonly Analytics _analytics;
 
@@ -69,8 +69,9 @@ namespace Hightouch.Events.Utilities
 
         public void Put(RawEvent @event) => _writeChannel.Send(@event);
 
-        public void Flush() {
-            FlushEvent flushEvent = new FlushEvent(new SemaphoreSlim(1,1));
+        public void Flush()
+        {
+            FlushEvent flushEvent = new FlushEvent(new SemaphoreSlim(1, 1));
             _writeChannel.Send(flushEvent);
             flushEvent._semaphore.Wait(_flushTimeout, _flushCancellationToken);
         }

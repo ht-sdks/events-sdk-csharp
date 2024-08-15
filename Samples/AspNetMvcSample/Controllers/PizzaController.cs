@@ -3,7 +3,7 @@ using AspNetMvcSample.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Hightouch.Events;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace AspNetMvcSample.Controllers
 {

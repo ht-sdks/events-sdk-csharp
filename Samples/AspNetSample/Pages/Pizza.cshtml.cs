@@ -7,7 +7,7 @@ using AspNetSample.Pages.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Hightouch.Events;
-using Segment.Serialization;
+using Hightouch.Events.Serialization;
 
 namespace AspNetSample.Pages
 {
@@ -29,7 +29,7 @@ namespace AspNetSample.Pages
 
         public string GlutenFreeText(Pizza pizza)
         {
-            return pizza.IsGlutenFree ? "Gluten Free": "Not Gluten Free";
+            return pizza.IsGlutenFree ? "Gluten Free" : "Not Gluten Free";
         }
 
         public IActionResult OnPost()
