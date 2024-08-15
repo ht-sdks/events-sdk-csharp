@@ -32,12 +32,6 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Coroutine.NET, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\..\packages\Coroutine.NET.1.3.0\lib\netstandard2.0\Coroutine.NET.dll</HintPath>
-        </Reference>
-        <Reference Include="Serialization.NET">
-          <HintPath>..\..\..\..\.nuget\packages\serialization.net\1.4.0\lib\netstandard2.0\Serialization.NET.dll</HintPath>
-        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Xml" />

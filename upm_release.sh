@@ -88,7 +88,7 @@ rm -rf events-sdk-csharp/Plugins/*
 # download events-sdk-csharp and its dependencies from nuget
 nuget install Hightouch.Events.CSharp -Version "$VERSION" -OutputDirectory events-sdk-csharp/Plugins
 # remove dependencies that are not required
-declare -a deps=(events-sdk-csharp/Plugins/Coroutine.NET.* events-sdk-csharp/Plugins/Serialization.NET.* events-sdk-csharp/Plugins/Sovran.NET.* events-sdk-csharp/Plugins/Hightouch.Events.CSharp.*)
+declare -a deps=(events-sdk-csharp/Plugins/Hightouch.Events.CSharp.*)
 for dir in events-sdk-csharp/Plugins/*; do
   if [ -d "$dir" ]; then
     in_deps=false
