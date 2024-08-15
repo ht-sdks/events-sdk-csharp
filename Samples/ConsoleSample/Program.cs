@@ -3,6 +3,7 @@
 using System;
 using ConsoleSample;
 using Hightouch.Events;
+using Hightouch.Events.Serialization;
 using Hightouch.Events.Utilities;
 
 var analytics = new Analytics(new Configuration("WRITE_KEY",
@@ -12,6 +13,6 @@ var analytics = new Analytics(new Configuration("WRITE_KEY",
 Analytics.Logger = new HightouchLogger();
 
 analytics.Identify("foo");
-analytics.Track("track right after identify");
+analytics.Track("track right after identify", new JsonObject { ["key"] = "value" });
 
 Console.ReadLine();
