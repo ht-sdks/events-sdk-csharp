@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Segment.Serialization;
 
 namespace Hightouch.Events.Plugins
@@ -31,7 +31,7 @@ namespace Hightouch.Events.Plugins
             }
 
             // All active integrations, not in `bundled` are put in `unbundled`
-            foreach (string integration in _settings.Integrations.Keys)
+            foreach (string integration in _settings.Integrations?.Keys ?? Array.Empty<string>())
             {
                 if (integration != "Hightouch.io" && !bundled.Contains(integration))
                 {
