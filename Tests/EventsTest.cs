@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Utilities;

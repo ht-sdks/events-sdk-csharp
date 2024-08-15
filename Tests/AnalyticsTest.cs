@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Moq;
 using Hightouch.Events;
-using Hightouch.Events.Plugins;
 using Hightouch.Events.Utilities;
 using Hightouch.Events.Serialization;
 using Tests.Utils;

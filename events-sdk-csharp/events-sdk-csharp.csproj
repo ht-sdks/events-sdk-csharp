@@ -7,7 +7,6 @@
 
   <PropertyGroup>
     <PackageOutputPath>./nupkg</PackageOutputPath>
-
     <Authors>Hightouch</Authors>
     <Description>The hassle-free way to add analytics to your C# app.</Description>
     <Version>0.0.1</Version>
