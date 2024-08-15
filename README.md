@@ -41,7 +41,7 @@
   - [Contributing](#contributing)
   - [Code of Conduct](#code-of-conduct)
 
-events-sdk-csharp is supported across the following platforms:
+`events-sdk-csharp` is supported across the following platforms:
 * net/.net core/.net framework
 * mono
 * universal windows platform
@@ -71,11 +71,9 @@ To get started with `events-sdk-csharp`:
 2. Initialize and configure the client.
 
     ```c#
-    // NOTE: to make Analytics stateless/in-memory,
-    // add `InMemoryStorageProvider` to the configuration
     var configuration = new Configuration("WRITE_KEY",
-        flushAt: 20,
-        flushInterval: 30);
+        apiHost: "https://us-east-1.hightouch-events.com",
+        storageProvider: new InMemoryStorageProvider());
 
     var analytics = new Analytics(configuration);
     ```

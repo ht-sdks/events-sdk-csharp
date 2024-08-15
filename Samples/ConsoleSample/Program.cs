@@ -3,8 +3,12 @@
 using System;
 using ConsoleSample;
 using Hightouch.Events;
+using Hightouch.Events.Utilities;
 
-var analytics = new Analytics(new Configuration("67de78e61b519fc4678541119d426e927a77572331ad3f86db0059c07aaa4335", apiHost: "http://localhost:7777", flushAt: 1));
+var analytics = new Analytics(new Configuration("WRITE_KEY",
+    apiHost: "http://localhost:7777",
+    flushAt: 1,
+    storageProvider: new InMemoryStorageProvider()));
 Analytics.Logger = new HightouchLogger();
 
 analytics.Identify("foo");
