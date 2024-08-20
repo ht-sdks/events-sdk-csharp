@@ -1,9 +1,9 @@
 using System;
 using System.Runtime.Serialization;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
-using Segment.Serialization;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Serialization;
 
 namespace Tests.Utils
 {

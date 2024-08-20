@@ -1,9 +1,9 @@
 using System;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 using Xunit;
 
 namespace Tests.Utilities
@@ -31,7 +31,7 @@ namespace Tests.Utilities
             };
             _configuration = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 defaultSettings: _settings
             );
@@ -41,14 +41,14 @@ namespace Tests.Utilities
         [Fact]
         public void TestLog()
         {
-            var logger = new Mock<ISegmentLogger>();
+            var logger = new Mock<IHightouchLogger>();
             Analytics.Logger = logger.Object;
             var exception = new Exception();
             _storage
                 .Setup(o => o.Read(It.IsAny<StorageConstants>()))
                 .Throws(exception);
 
-            Segment.Analytics.System.DefaultState(_configuration, _storage.Object);
+            Hightouch.Events.System.DefaultState(_configuration, _storage.Object);
 
             logger.Verify(o => o.Log(LogLevel.Error, exception, It.IsAny<string>()), Times.Exactly(1));
         }

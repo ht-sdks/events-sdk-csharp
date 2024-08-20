@@ -1,6 +1,6 @@
 using System.Dynamic;
 using Microsoft.AspNetCore.Mvc;
-using Segment.Analytics;
+using Hightouch.Events;
 
 namespace AspNetMvcSample.Controllers
 {

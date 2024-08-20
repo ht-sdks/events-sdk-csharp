@@ -1,5 +1,5 @@
 ﻿using System;
-using Segment.Analytics;
+using Hightouch.Events;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,8 +15,7 @@ namespace XamarinSample
         {
             InitializeComponent();
 
-            var configuration = new Configuration("HhvdP2KyRHb1XGiSTHjBcJiHckP6efii",
-                flushAt: 1);
+            var configuration = new Configuration("WRITE_KEY", flushAt: 1);
             analytics = new Analytics(configuration);
 
             MainPage = new MainPage();

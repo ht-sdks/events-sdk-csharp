@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 using Tests.Utils;
 using Xunit;
 
@@ -24,7 +24,7 @@ namespace Tests.Utilities
         public SettingsTest()
         {
             _settings = JsonUtility.FromJson<Settings?>(
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
 
             var mockHttpClient = new Mock<HTTPClient>(null, null, null);
             mockHttpClient
@@ -38,13 +38,13 @@ namespace Tests.Utilities
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new MockStorageProvider(_storage),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 httpClientProvider: new MockHttpClientProvider(mockHttpClient)
             );
             _analytics = new Analytics(config);
         }
-            
+
         [Fact]
         public async Task PluginUpdatesWithInitalOnlyOnce()
         {
@@ -61,7 +61,7 @@ namespace Tests.Utilities
             await _analytics.CheckSettings();
             plugin.Verify(p => p.Update(It.IsAny<Settings>(), UpdateType.Initial), Times.Once);
             plugin.Verify(p => p.Update(It.IsAny<Settings>(), UpdateType.Refresh), Times.Once);
-            Segment.Analytics.System system = await _analytics.Store.CurrentState<Segment.Analytics.System>();
+            Hightouch.Events.System system = await _analytics.Store.CurrentState<Hightouch.Events.System>();
             Assert.Contains(plugin.Object.GetHashCode(), system._initializedPlugins);
 
             // readd plugin (why would you do this?)

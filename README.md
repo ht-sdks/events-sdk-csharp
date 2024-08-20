@@ -1,36 +1,47 @@
-# Analytics-CSharp
+# events-sdk-csharp
 
-### 🎉 Flagship 🎉
-This library is one of Segment’s most popular Flagship libraries. It is actively maintained by Segment, benefitting from new feature releases and ongoing support.
+![Nuget](https://img.shields.io/nuget/v/Hightouch.Events.CSharp)
+[![openupm](https://img.shields.io/npm/v/com.hightouch.events.csharp?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.hightouch.events.csharp/)
+[![](https://github.com/ht-sdks/events-sdk-csharp/actions/workflows/build.yml/badge.svg)](https://github.com/ht-sdks/events-sdk-csharp/actions)
+[![](https://img.shields.io/github/license/ht-sdks/events-sdk-csharp)](https://github.com/ht-sdks/events-sdk-csharp/blob/main/LICENSE)
 
-![Nuget](https://img.shields.io/nuget/v/Segment.Analytics.CSharp)
-[![openupm](https://img.shields.io/npm/v/com.segment.analytics.csharp?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.segment.analytics.csharp/)
-[![](https://github.com/segmentio/analytics-csharp/actions/workflows/build.yml/badge.svg)](https://github.com/segmentio/analytics-csharp/actions)
-[![](https://img.shields.io/github/license/segmentio/analytics-csharp)](https://github.com/segmentio/analytics-csharp/blob/main/LICENSE)
-
-- [Analytics-CSharp](#analytics-csharp)
+- [events-sdk-csharp](#events-sdk-csharp)
   - [Getting Started](#getting-started)
-  - [Tracking Methods](#tracking-methods)
+    - [Track](#track)
+    - [Screen](#screen)
+    - [Page](#page)
+    - [Group](#group)
   - [Plugin Architecture](#plugin-architecture)
+    - [Fundamentals](#fundamentals)
+      - [Plugin](#plugin)
+      - [EventPlugin](#eventplugin)
+      - [DestinationPlugin](#destinationplugin)
+    - [Advanced concepts](#advanced-concepts)
   - [Adding a plugin](#adding-a-plugin)
+    - [Example projects using events-sdk-csharp](#example-projects-using-events-sdk-csharp)
   - [Utility Methods](#utility-methods)
+    - [Add](#add)
+    - [Find](#find)
+    - [Remove](#remove)
+    - [Flush](#flush)
+    - [Reset](#reset)
   - [Controlling Upload With Flush Policies](#controlling-upload-with-flush-policies)
+    - [Adding or removing policies](#adding-or-removing-policies)
+    - [Creating your own flush policies](#creating-your-own-flush-policies)
   - [Handling Errors](#handling-errors)
+    - [Reporting errors from plugins](#reporting-errors-from-plugins)
+    - [Listen to Analytics Logs](#listen-to-analytics-logs)
   - [Customize HTTP Client](#customize-http-client)
+    - [Proxying HTTP Calls](#proxying-http-calls)
   - [Customize Storage](#customize-storage)
   - [Json Library](#json-library)
   - [Samples](#samples)
   - [Compatibility](#compatibility)
   - [Changelog](#changelog)
   - [Contributing](#contributing)
-  - [Integrating with Segment](#integrating-with-segment)
   - [Code of Conduct](#code-of-conduct)
-  - [License](#license)
 
-
-The hassle-free way to add Segment analytics to your .Net app (Unity/Xamarin/.Net). Analytics helps you measure your users, product, and business. It unlocks insights into your app's funnel, core business metrics, and whether you have product-market fit.
-
-Analytics-CSharp is supported across the following platforms:
+`events-sdk-csharp` is supported across the following platforms:
 * net/.net core/.net framework
 * mono
 * universal windows platform
@@ -44,48 +55,39 @@ Analytics-CSharp is supported across the following platforms:
     * pc, mac, linux
 
 
-**NOTE: Migrating from Analytics.NET and Analytics.Xamarin? See our migration guide [here](https://segment.com/docs/connections/sources/catalog/libraries/server/csharp/migration-guide/)**
-
-### BREAKING CHANGES ALERT: if you are upgrading from 1.+ to 2.+, check out the breaking changes list [here](https://github.com/segmentio/Analytics-CSharp/releases/tag/2.0.0).
-
 ## Getting Started
 
-To get started with the Analytics-CSharp library:
+To get started with `events-sdk-csharp`:
 
-1. Create a Source in Segment.
-   1. Go to **Connections > Sources > Add Source**.
-   2. Search for **Xamarin** or **Unity** or **.NET** and click **Add source**.
-2. Add the Analytics dependency to your project. **Analytics-CSharp** is distributed via NuGet. Check other installation options [here](https://www.nuget.org/packages/Segment.Analytics.CSharp/).
+1. Add the package to your project. **events-sdk-csharp** is distributed via NuGet. Check other installation options [here](https://www.nuget.org/packages/Hightouch.Events.CSharp/).
 
     ```
-    dotnet add package Segment.Analytics.CSharp --version <LATEST_VERSION>
+    dotnet add package Hightouch.Events.CSharp --version <LATEST_VERSION>
     ```
-    For Unity, it is distributed via OpenUPM. Read more about it [here](https://openupm.com/packages/com.segment.analytics.csharp/?subPage=readme).
+    For Unity, it is distributed via OpenUPM. Read more about it [here](https://openupm.com/packages/com.hightouch.events.csharp/?subPage=readme).
     ```
-   openupm add com.segment.analytics.csharp
+   openupm add com.hightouch.events.csharp
    ```
-3. Initialize and configure the client.
+2. Initialize and configure the client.
 
     ```c#
-        // NOTE: to make Analytics stateless/in-memory,
-        // add `InMemoryStorageProvider` to the configuration
-        var configuration = new Configuration("<YOUR WRITE KEY>",
-                flushAt: 20,
-                flushInterval: 30);
-        var analytics = new Analytics(configuration);
+    var configuration = new Configuration("WRITE_KEY",
+        apiHost: "https://us-east-1.hightouch-events.com",
+        storageProvider: new InMemoryStorageProvider());
+
+    var analytics = new Analytics(configuration);
     ```
 
    <br>These are the options you can apply to configure the client:
 
 | Option Name                 | Description                                                                                                                                                                                                                                                                                                                                   |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
- | `writeKey` *required*       | This is your Segment write key.                                                                                                                                                                                                                                                                                                               |
-| `flushAt`                   | Default set to `20`. <br> The count of events at which Segment flushes events.                                                                                                                                                                                                                                                                |
-| `flushInterval`             | Default set to `30` (seconds). <br> The interval in seconds at which Segment flushes events.                                                                                                                                                                                                                                                  |
+ | `writeKey` *required*       | This is your Hightouch write key.                                                                                                                                                                                                                                                                                                               |
+| `flushAt`                   | Default set to `20`. <br> The count of events at which Hightouch flushes events.                                                                                                                                                                                                                                                                |
+| `flushInterval`             | Default set to `30` (seconds). <br> The interval in seconds at which Hightouch flushes events.                                                                                                                                                                                                                                                  |
 | `defaultSettings`           | Default set to `{}`. <br> The settings object used as fallback in case of network failure.                                                                                                                                                                                                                                                    |
-| `autoAddSegmentDestination` | Default set to `true`. <br> This automatically adds the Segment Destination plugin. You can set this to `false` if you want to manually add the Segment Destination plugin.                                                                                                                                                                   |
- | `apiHost`                   | Default set to `api.segment.io/v1`. <br> This sets a default API Host to which Segment sends events.                                                                                                                                                                                                                                          |
-| `cdnHost`                   | Default set to `cdn-settings.segment.com/v1`. <br> This set a default cdnHost to which Segment fetches settings.                                                                                                                                                                                                                              |
+| `autoAddHightouchDestination` | Default set to `true`. <br> This automatically adds the Hightouch Destination plugin. You can set this to `false` if you want to manually add the Hightouch Destination plugin.                                                                                                                                                                   |
+ | `apiHost`                   | Default set to `https://us-east-1.hightouch-events.com`. <br> This sets a default API Host to which Hightouch sends events.                                                                                                                                                                                                                                          |
 | `analyticsErrorHandler`     | Default set to `null`. <br>This set an error handler to handle errors happened in analytics                                                                                                                                                                                                                                                   |
  | `storageProvider`           | Default set to `DefaultStorageProvider`. <br>This set how you want your data to be stored. <br> `DefaultStorageProvider` is used by default which stores data to local storage. `InMemoryStorageProvider` is also provided in the library. <br>You can also write your own storage solution by implementing `IStorageProvider` and `IStorage` |
 | `httpClientProvider`        | Default set to `DefaultHTTPClientProvider`. <br>This set a http client provider for analytics use to do network activities. The default provider uses System.Net.Http for network activities.                                                                                                                                                 |
@@ -93,14 +95,13 @@ To get started with the Analytics-CSharp library:
 
 ## Tracking Methods
 
-Once you've installed the mobile or server Analytics-CSharp library, you can start collecting data through Segment's tracking methods:
+Once you've installed the mobile or server `events-sdk-csharp` library, you can start collecting data through Hightouch's tracking methods:
 - [Identify](#identify)
 - [Track](#track)
 - [Screen](#screen)
 - [Page](#page)
 - [Group](#group)
 
-> info ""
 > For any of the different methods described, you can replace the properties and traits in the code samples with variables that represent the data collected.
 
 ### Identify
@@ -162,9 +163,9 @@ analytics.Group("user-123", new JsonObject {
 ```
 
 ## Plugin Architecture
-Segment's plugin architecture enables you to modify and augment how the analytics client works. From modifying event payloads to changing analytics functionality, plugins help to speed up the process of getting things done.
+Hightouch's plugin architecture enables you to modify and augment how the analytics client works. From modifying event payloads to changing analytics functionality, plugins help to speed up the process of getting things done.
 
-Plugins are run through a timeline, which executes in order of insertion based on their entry types. Segment has these 5 entry types:
+Plugins are run through a timeline, which executes in order of insertion based on their entry types. Hightouch Events has these 5 entry types:
 
 | Type          | Details                                                                                        |
 |---------------| ---------------------------------------------------------------------------------------------- |
@@ -302,11 +303,11 @@ var yourPlugin = new SomePlugin()
 analytics.Add(yourPlugin)
 ```
 
-### Example projects using Analytics-CSharp
-See how different platforms and languages use Analytics-CSharp in different [example projects](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples).
+### Example projects using events-sdk-csharp
+See how different platforms and languages use events-sdk-csharp in different [example projects](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples).
 
 ## Utility Methods
-The Analytics-CSharp utility methods help you work with plugins from the analytics timeline. They include:
+The events-sdk-csharp utility methods help you work with plugins from the analytics timeline. They include:
 - [Add](#add)
 - [Find](#find)
 - [Remove](#remove)
@@ -364,7 +365,7 @@ analytics.Reset()
 ## Controlling Upload With Flush Policies
 To more granularly control when events are uploaded you can use `FlushPolicies`. **This will override any setting on `flushAt` and `flushInterval`, but you can use `CountFlushPolicy` and `FrequencyFlushPolicy` to have the same behaviour respectively.**
 
-A Flush Policy defines the strategy for deciding when to flush, this can be on an interval, on a certain time of day, after receiving a certain number of events or even after receiving a particular event. This gives you even more flexibility on when to send event to Segment.
+A Flush Policy defines the strategy for deciding when to flush, this can be on an interval, on a certain time of day, after receiving a certain number of events or even after receiving a particular event. This gives you even more flexibility on when to send event to Hightouch.
 
 To make use of flush policies you can set them in the configuration of the client:
 ```csharp
@@ -446,7 +447,7 @@ class FlushOnScreenEventsPolicy : IFlushPolicy
 ## Handling Errors
 You can handle analytics client errors through the `analyticsErrorHandler` option.
 
-The error handler configuration requires an instance that implements `IAnalyticsErrorHandler` which will get called whenever an error happens on the analytics client. It will receive a general `Exception`, but you can check if the exception is a type of `AnalyticsError` and converts to get more info about the error. Checkout [here](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Errors.cs#L77) to see a full list of error types that analytics throws.
+The error handler configuration requires an instance that implements `IAnalyticsErrorHandler` which will get called whenever an error happens on the analytics client. It will receive a general `Exception`, but you can check if the exception is a type of `AnalyticsError` and converts to get more info about the error. Checkout [here](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Hightouch/Events/Errors.cs#L77) to see a full list of error types that analytics throws.
 
 You can use this error handling to trigger different behaviours in the client when a problem occurs. For example if the client gets rate limited you could use the error handler to swap flush policies to be less aggressive:
 
@@ -474,7 +475,7 @@ class NetworkErrorHandler : IAnalyticsErrorHandler
 
 ### Reporting errors from plugins
 
-Plugins can also report errors to the handler by using the [`.ReportInternalError`](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Errors.cs#L54) function of the analytics client, we recommend using the `AnalyticsErrorType.PluginError` for consistency, and attaching the `exception` with the actual exception that was hit:
+Plugins can also report errors to the handler by using the [`.ReportInternalError`](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Hightouch/Events/Errors.cs#L54) function of the analytics client, we recommend using the `AnalyticsErrorType.PluginError` for consistency, and attaching the `exception` with the actual exception that was hit:
 
 ```csharp
     try
@@ -490,11 +491,11 @@ Plugins can also report errors to the handler by using the [`.ReportInternalErro
 
 ### Listen to Analytics Logs
 
-Besides error handling, you could also provide a static `ISegmentLogger` to help log and debug as well as error handling. The same log that is reported by `ReportInternalError` is also reported to this static logger. The static logger also receives more errors and exceptions because it does not require an `Analytics` instance available. Thus, it's also a good idea to use the logger as an addition to `IAnalyticsErrorHandler`.
+Besides error handling, you could also provide a static `IHightouchLogger` to help log and debug as well as error handling. The same log that is reported by `ReportInternalError` is also reported to this static logger. The static logger also receives more errors and exceptions because it does not require an `Analytics` instance available. Thus, it's also a good idea to use the logger as an addition to `IAnalyticsErrorHandler`.
 ```csharp
-Analytics.Logger = new SegmentLogger();
+Analytics.Logger = new HightouchLogger();
 
-class SegmentLogger : ISegmentLogger
+class HightouchLogger : IHightouchLogger
 {
     public void Log(LogLevel logLevel, Exception exception = null, string message = null)
     {
@@ -521,7 +522,7 @@ class SegmentLogger : ISegmentLogger
 
 ## Customize HTTP Client
 
-The SDK allows you to have full control over the network components. You can easily swap out System.Net with your favorite network library by implementing `IHTTPClientProvider` and extending `HTTPClient`. Take a look at [this example](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs) where the default http client is fully replaced by Unity's `UnityWebRequest`.
+The SDK allows you to have full control over the network components. You can easily swap out System.Net with your favorite network library by implementing `IHTTPClientProvider` and extending `HTTPClient`. Take a look at [this example](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs) where the default http client is fully replaced by Unity's `UnityWebRequest`.
 
 ### Proxying HTTP Calls
 
@@ -533,7 +534,7 @@ class ProxyHttpClient : DefaultHTTPClient
     {
     }
 
-    public override string SegmentURL(string host, string path)
+    public override string HightouchURL(string host, string path)
     {
         if (host.Equals(_apiHost))
         {
@@ -557,7 +558,7 @@ class ProxyHttpClientProvider : IHTTPClientProvider
 
 ## Customize Storage
 
-The SDK also allows you to fully customize your storage strategy. It comes with two standard providers: `DefaultStorageProvider` that stores data to local disk and `InMemoryStorageProvider` that stores data all in memory. You can write up your own provider according to your needs, for example, store data to a database or to your own server directly, by implementing `IStorage` and `IStorageProvider`. Please refer to the implementation of [`Storage`](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Utilities/Storage.cs) as example.
+The SDK also allows you to fully customize your storage strategy. It comes with two standard providers: `DefaultStorageProvider` that stores data to local disk and `InMemoryStorageProvider` that stores data all in memory. You can write up your own provider according to your needs, for example, store data to a database or to your own server directly, by implementing `IStorage` and `IStorageProvider`. Please refer to the implementation of [`Storage`](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Hightouch/Events/Utilities/Storage.cs) as example.
 
 ## Json Library
 
@@ -571,59 +572,30 @@ For sample usages of the SDK in specific platforms, checkout the following:
 
 | Platform    | Sample                                                                                                                                 |
 |-------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Asp.Net     | [Setup with dependency injection](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/AspNetSample)                        |
-| Asp.Net MVC | [Setup with dependency injection](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/AspNetMvcSample)                     |
-| Console     | [Basic setups](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/Program.cs)                               |
-| Unity       | [Singleton Analytics](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/SingletonAnalytics.cs)               |
-|             | [Lifecycle plugin](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/LifecyclePlugin.cs)                     |
-|             | [Custom HTTPClient](https://github.com/segmentio/Analytics-CSharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs)                    |
-| Xamarin     | [Basic setups](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/XamarinSample)                                          |
-| General     | [Custom HTTP client](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/ProxyHttpClient.cs)                 |
-|             | [Custom Storage](https://github.com/segmentio/Analytics-CSharp/blob/main/Analytics-CSharp/Segment/Analytics/Utilities/Storage.cs#L200) |
-|             | [Flush Policy](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/FlushOnScreenEventsPolicy.cs)             |
-|             | [Custom Logger](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/SegmentLogger.cs)                        |
-|             | [Custom Error Handler](https://github.com/segmentio/Analytics-CSharp/tree/main/Samples/ConsoleSample/NetworkErrorHandler.cs)           |
+| Asp.Net     | [Setup with dependency injection](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/AspNetSample)                        |
+| Asp.Net MVC | [Setup with dependency injection](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/AspNetMvcSample)                     |
+| Console     | [Basic setups](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/Program.cs)                               |
+| Unity       | [Singleton Analytics](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/SingletonAnalytics.cs)               |
+|             | [Lifecycle plugin](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/LifecyclePlugin.cs)                     |
+|             | [Custom HTTPClient](https://github.com/ht-sdks/events-sdk-csharp/blob/main/Samples/UnitySample/UnityHTTPClient.cs)                    |
+| Xamarin     | [Basic setups](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/XamarinSample)                                          |
+| General     | [Custom HTTP client](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/ProxyHttpClient.cs)                 |
+|             | [Custom Storage](https://github.com/ht-sdks/events-sdk-csharp/blob/main/events-sdk-csharp/Hightouch/Events/Utilities/Storage.cs#L200) |
+|             | [Flush Policy](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/FlushOnScreenEventsPolicy.cs)             |
+|             | [Custom Logger](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/HightouchLogger.cs)                        |
+|             | [Custom Error Handler](https://github.com/ht-sdks/events-sdk-csharp/tree/main/Samples/ConsoleSample/NetworkErrorHandler.cs)           |
 
 ## Compatibility
-This library targets `.NET Standard 1.3` and `.NET Standard 2.0`. Checkout [here](https://www.nuget.org/packages/Segment.Analytics.CSharp/#supportedframeworks-body-tab) for compatible platforms.
+This library targets `.NET Standard 1.3` and `.NET Standard 2.0`. Checkout [here](https://www.nuget.org/packages/Hightouch.Events.CSharp/#supportedframeworks-body-tab) for compatible platforms.
 
 ## Changelog
-[View the Analytics-CSharp changelog on GitHub](https://github.com/segmentio/analytics-csharp/releases).
+[View the events-sdk-csharp changelog on GitHub](https://github.com/ht-sdks/events-sdk-csharp/releases).
 
 
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
-## Integrating with Segment
-
-Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
-
 ## Code of Conduct
 
 Before contributing, please also see our [code of conduct](CODE_OF_CONDUCT.md).
-
-## License
-```
-MIT License
-
-Copyright (c) 2021 Segment
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```

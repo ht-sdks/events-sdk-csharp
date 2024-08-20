@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Plugins;
-using Segment.Analytics.Utilities;
-using Segment.Serialization;
+using Hightouch.Events;
+using Hightouch.Events.Plugins;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Serialization;
 using Tests.Utils;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace Tests
         public PluginsTest()
         {
             _settings = JsonUtility.FromJson<Settings?>(
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
 
             var mockHttpClient = new Mock<HTTPClient>(null, null, null);
             mockHttpClient
@@ -30,7 +30,7 @@ namespace Tests
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 httpClientProvider: new MockHttpClientProvider(mockHttpClient)
             );
@@ -99,7 +99,7 @@ namespace Tests
         [Fact]
         public void FindByDestinationKey()
         {
-            var expected = new SegmentDestination();
+            var expected = new HightouchDestination();
             _analytics.Add(expected);
 
             DestinationPlugin actual = _analytics.Find(expected.Key);
@@ -118,18 +118,18 @@ namespace Tests
             plugin.Setup(o => o.Key).Returns("mock");
 
             var alias = new List<AliasEvent>();
-            plugin.Setup(o => o.Alias(Moq.Capture.In(alias))).Returns((AliasEvent a) => {return a;}).Verifiable();
+            plugin.Setup(o => o.Alias(Moq.Capture.In(alias))).Returns((AliasEvent a) => { return a; }).Verifiable();
             var group = new List<GroupEvent>();
-            plugin.Setup(o => o.Group(Moq.Capture.In(group))).Returns((GroupEvent a) => {return a;}).Verifiable();
+            plugin.Setup(o => o.Group(Moq.Capture.In(group))).Returns((GroupEvent a) => { return a; }).Verifiable();
             var identify = new List<IdentifyEvent>();
-            plugin.Setup(o => o.Identify(Moq.Capture.In(identify))).Returns((IdentifyEvent a) => {return a;}).Verifiable();
+            plugin.Setup(o => o.Identify(Moq.Capture.In(identify))).Returns((IdentifyEvent a) => { return a; }).Verifiable();
             var page = new List<PageEvent>();
-            plugin.Setup(o => o.Page(Moq.Capture.In(page))).Returns((PageEvent a) => {return a;}).Verifiable();
+            plugin.Setup(o => o.Page(Moq.Capture.In(page))).Returns((PageEvent a) => { return a; }).Verifiable();
             var screen = new List<ScreenEvent>();
-            plugin.Setup(o => o.Screen(Moq.Capture.In(screen))).Returns((ScreenEvent a) => {return a;}).Verifiable();
+            plugin.Setup(o => o.Screen(Moq.Capture.In(screen))).Returns((ScreenEvent a) => { return a; }).Verifiable();
             var track = new List<TrackEvent>();
-            plugin.Setup(o => o.Track(Moq.Capture.In(track))).Returns((TrackEvent a) => {return a;}).Verifiable();
-            
+            plugin.Setup(o => o.Track(Moq.Capture.In(track))).Returns((TrackEvent a) => { return a; }).Verifiable();
+
             _analytics.Add(plugin.Object);
             _analytics.ManuallyEnableDestination(plugin.Object);
 
@@ -156,7 +156,7 @@ namespace Tests
             _analytics.Track("testtrack");
             plugin.Verify(o => o.Track(It.IsAny<TrackEvent>()), Times.Exactly(1));
             Assert.Equal("testtrack", track[0].Event);
-            
+
         }
     }
 }

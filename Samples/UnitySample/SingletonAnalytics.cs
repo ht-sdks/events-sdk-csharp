@@ -1,6 +1,6 @@
 using System;
-using Segment.Analytics;
-using Segment.Concurrent;
+using Hightouch.Events;
+using Hightouch.Events.Concurrent;
 using UnityEngine;
 
 namespace UnitySample
@@ -14,7 +14,7 @@ namespace UnitySample
             // you don't have to use `UnityHTTPClientProvider`
             // the default httpClientProvider works on Unity, too.
             Configuration configuration =
-                new Configuration("YOUR WRITE KEY",
+                new Configuration("WRITE_KEY",
                     exceptionHandler: new ErrorHandler(),
                     httpClientProvider: new UnityHTTPClientProvider(MainThreadDispatcher.Instance));
             Analytics = new Analytics(configuration);

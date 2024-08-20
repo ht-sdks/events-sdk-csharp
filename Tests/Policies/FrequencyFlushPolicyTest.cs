@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Policies;
-using Segment.Concurrent;
+using Hightouch.Events;
+using Hightouch.Events.Policies;
+using Hightouch.Events.Concurrent;
 using Xunit;
 
 namespace Tests.Policies
@@ -16,11 +16,11 @@ namespace Tests.Policies
         {
             var config = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false
+                autoAddHightouchDestination: false
             );
 
             _policy = new FrequencyFlushPolicy(1000);
-            _analytics = new Mock<Analytics>(config) {CallBase = true};
+            _analytics = new Mock<Analytics>(config) { CallBase = true };
             _analytics.Setup(o => o.AnalyticsScope).Returns(new Scope());
             _analytics.Setup(o => o.FileIODispatcher)
                 .Returns(new Dispatcher(new LimitedConcurrencyLevelTaskScheduler(1)));

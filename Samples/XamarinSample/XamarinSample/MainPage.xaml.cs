@@ -1,6 +1,6 @@
 ﻿using System;
-using Segment.Analytics;
-using Segment.Serialization;
+using Hightouch.Events;
+using Hightouch.Events.Serialization;
 using Xamarin.Forms;
 
 namespace XamarinSample

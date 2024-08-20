@@ -1,4 +1,4 @@
-using Segment.Analytics.Utilities;
+using Hightouch.Events.Utilities;
 
 namespace ConsoleSample
 {
@@ -8,7 +8,7 @@ namespace ConsoleSample
         {
         }
 
-        public override string SegmentURL(string host, string path)
+        public override string HightouchURL(string host, string path)
         {
             if (host.Equals(_apiHost))
             {

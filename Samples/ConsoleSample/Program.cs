@@ -2,26 +2,17 @@
 
 using System;
 using ConsoleSample;
-using Segment.Analytics;
+using Hightouch.Events;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Utilities;
 
-
-var configuration = new Configuration("YOUR WRITE KEY",
+var analytics = new Analytics(new Configuration("WRITE_KEY",
+    apiHost: "http://localhost:7777",
     flushAt: 1,
-    flushInterval: 10,
-    exceptionHandler: new ErrorHandler());
-var analytics = new Analytics(configuration);
-Analytics.Logger = new SegmentLogger();
+    storageProvider: new InMemoryStorageProvider()));
+Analytics.Logger = new HightouchLogger();
 
 analytics.Identify("foo");
-analytics.Track("track right after identify");
+analytics.Track("track right after identify", new JsonObject { ["key"] = "value" });
 
 Console.ReadLine();
-
-
-class ErrorHandler : IAnalyticsErrorHandler
-{
-    public void OnExceptionThrown(Exception e)
-    {
-        Console.WriteLine(e.StackTrace);
-    }
-}

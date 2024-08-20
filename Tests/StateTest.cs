@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 using Xunit;
 
 namespace Tests
@@ -31,7 +31,7 @@ namespace Tests
             };
             _configuration = new Configuration(
                 writeKey: "123",
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 defaultSettings: _settings
             );
@@ -42,13 +42,13 @@ namespace Tests
         public void TestSystemDefaultState()
         {
             string settingsStr =
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}";
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}";
             Settings settings = JsonUtility.FromJson<Settings>(settingsStr);
             _storage
                 .Setup(o => o.Read(It.IsAny<StorageConstants>()))
                 .Returns(settingsStr);
 
-            var actual = Segment.Analytics.System.DefaultState(_configuration, _storage.Object);
+            var actual = Hightouch.Events.System.DefaultState(_configuration, _storage.Object);
 
             Assert.Equal(_configuration, actual._configuration);
             Assert.Equal(settings.Integrations.ToString(), actual._settings.Integrations.ToString());
@@ -62,7 +62,7 @@ namespace Tests
                 .Setup(o => o.Read(It.IsAny<StorageConstants>()))
                 .Returns("");
 
-            var actual = Segment.Analytics.System.DefaultState(_configuration, _storage.Object);
+            var actual = Hightouch.Events.System.DefaultState(_configuration, _storage.Object);
 
             Assert.Equal(_configuration, actual._configuration);
             Assert.Equal(_settings.Integrations.ToString(), actual._settings.Integrations.ToString());
@@ -76,7 +76,7 @@ namespace Tests
                 .Setup(o => o.Read(It.IsAny<StorageConstants>()))
                 .Throws<Exception>();
 
-            var actual = Segment.Analytics.System.DefaultState(_configuration, _storage.Object);
+            var actual = Hightouch.Events.System.DefaultState(_configuration, _storage.Object);
 
             Assert.Equal(_configuration, actual._configuration);
             Assert.Equal(_settings.Integrations.ToString(), actual._settings.Integrations.ToString());
@@ -86,11 +86,11 @@ namespace Tests
         [Fact]
         public async Task TestUpdateSettingsAction()
         {
-            await _store.Provide(Segment.Analytics.System.DefaultState(_configuration, _storage.Object));
-            await _store.Dispatch<Segment.Analytics.System.UpdateSettingsAction, Segment.Analytics.System>(
-                new Segment.Analytics.System.UpdateSettingsAction(_settings));
+            await _store.Provide(Hightouch.Events.System.DefaultState(_configuration, _storage.Object));
+            await _store.Dispatch<Hightouch.Events.System.UpdateSettingsAction, Hightouch.Events.System>(
+                new Hightouch.Events.System.UpdateSettingsAction(_settings));
 
-            Segment.Analytics.System actual = await _store.CurrentState<Segment.Analytics.System>();
+            Hightouch.Events.System actual = await _store.CurrentState<Hightouch.Events.System>();
 
             Assert.Equal(_settings.Integrations.ToString(), actual._settings.Integrations.ToString());
             Assert.False(actual._running);
@@ -99,11 +99,11 @@ namespace Tests
         [Fact]
         public async Task TestToggleRunningAction()
         {
-            await _store.Provide(Segment.Analytics.System.DefaultState(_configuration, _storage.Object));
-            await _store.Dispatch<Segment.Analytics.System.ToggleRunningAction, Segment.Analytics.System>(
-                new Segment.Analytics.System.ToggleRunningAction(true));
+            await _store.Provide(Hightouch.Events.System.DefaultState(_configuration, _storage.Object));
+            await _store.Dispatch<Hightouch.Events.System.ToggleRunningAction, Hightouch.Events.System>(
+                new Hightouch.Events.System.ToggleRunningAction(true));
 
-            Segment.Analytics.System actual = await _store.CurrentState<Segment.Analytics.System>();
+            Hightouch.Events.System actual = await _store.CurrentState<Hightouch.Events.System>();
 
             Assert.Equal(_settings.Integrations.ToString(), actual._settings.Integrations.ToString());
             Assert.True(actual._running);
@@ -113,11 +113,11 @@ namespace Tests
         public async Task TestAddDestinationToSettingsAction()
         {
             string expectedKey = "foo";
-            await _store.Provide(Segment.Analytics.System.DefaultState(_configuration, _storage.Object));
-            await _store.Dispatch<Segment.Analytics.System.AddDestinationToSettingsAction, Segment.Analytics.System>(
-                new Segment.Analytics.System.AddDestinationToSettingsAction(expectedKey));
+            await _store.Provide(Hightouch.Events.System.DefaultState(_configuration, _storage.Object));
+            await _store.Dispatch<Hightouch.Events.System.AddDestinationToSettingsAction, Hightouch.Events.System>(
+                new Hightouch.Events.System.AddDestinationToSettingsAction(expectedKey));
 
-            Segment.Analytics.System actual = await _store.CurrentState<Segment.Analytics.System>();
+            Hightouch.Events.System actual = await _store.CurrentState<Hightouch.Events.System>();
 
             Assert.True(actual._settings.Integrations.GetBool(expectedKey));
             Assert.False(actual._running);
@@ -146,7 +146,7 @@ namespace Tests
             _configuration = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true
             );
             _storage = new Mock<IStorage>();

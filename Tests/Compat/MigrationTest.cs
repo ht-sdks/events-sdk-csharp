@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
-using Segment.Analytics.Compat;
-using Segment.Serialization;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Compat;
+using Hightouch.Events.Serialization;
 using Tests.Utils;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace Tests.Compat
         public MigrationTest()
         {
             _settings = JsonUtility.FromJson<Settings?>(
-                "{\"integrations\":{\"Segment.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
+                "{\"integrations\":{\"Hightouch.io\":{\"apiKey\":\"1vNgUqwJeCHmqgI9S1sOm9UHCyfYqbaQ\"}},\"plan\":{},\"edgeFunction\":{}}");
 
             var mockHttpClient = new Mock<HTTPClient>(null, null, null);
             mockHttpClient
@@ -35,7 +35,7 @@ namespace Tests.Compat
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 httpClientProvider: new MockHttpClientProvider(mockHttpClient)
             );

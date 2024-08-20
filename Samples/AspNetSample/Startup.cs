@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
 
 namespace AspNetSample
 {
@@ -26,7 +26,7 @@ namespace AspNetSample
         public void ConfigureServices(IServiceCollection services)
         {
             // use `InMemoryStorageProvider` to make Analytics stateless
-            var configuration = new Configuration("YOUR WRITE KEY",
+            var configuration = new Configuration("WRITE_KEY",
                 flushAt: 1,
                 flushInterval: 10,
                 storageProvider: new InMemoryStorageProvider());

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using Segment.Analytics;
-using Segment.Analytics.Utilities;
-using Segment.Serialization;
-using Segment.Sovran;
+using Hightouch.Events;
+using Hightouch.Events.Utilities;
+using Hightouch.Events.Serialization;
+using Hightouch.Events.Sovran;
 using Xunit;
 
 namespace Tests.Utilities
@@ -21,10 +21,10 @@ namespace Tests.Utilities
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true
             );
-            _analytics = new Mock<Analytics>(config){CallBase = true};
+            _analytics = new Mock<Analytics>(config) { CallBase = true };
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Tests.Utilities
             var config = new Configuration(
                 writeKey: "123",
                 storageProvider: new DefaultStorageProvider("tests"),
-                autoAddSegmentDestination: false,
+                autoAddHightouchDestination: false,
                 useSynchronizeDispatcher: true,
                 analyticsErrorHandler: errorHandler.Object
             );

@@ -1,0 +1,8 @@
+<linker>
+    <assembly fullname="Hightouch.Events.CSharp" preserve="all" />
+    <assembly fullname="Newtonsoft.Json" preserve="all" />
+    <assembly fullname="System.Core">
+        <type fullname="System.Linq.Expressions.Interpreter.LightLambda" preserve="all" />
+    </assembly>
+</linker>
+
