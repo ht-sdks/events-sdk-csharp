@@ -1,23 +1,23 @@
 {
-    "name": "com.hightouch.events.csharp",
-    "version": "0.0.0",
-    "displayName": "Hightouch Events for Unity",
-    "description": "Hightouch Events SDK for Unity",
-    "unity": "2019.1",
-    "unityRelease": "0b5",
-    "documentationUrl": "https://github.com/ht-sdks/events-sdk-csharp",
-    "changelogUrl": "https://github.com/ht-sdks/events-sdk-csharp/releases",
-    "licensesUrl": "https://github.com/ht-sdks/events-sdk-csharp/blob/main/LICENSE.md",
-    "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2"
-    },
-    "keywords": [
-        "Hightouch Events",
-        "Hightouch Unity"
-    ],
-    "author": {
-        "name": "Hightouch",
-        "email": "developers@hightouch.io",
-        "url": "https://www.hightouch.io"
-    }
+  "name": "com.hightouch.events.csharp",
+  "version": "0.0.3",
+  "displayName": "Hightouch Events for Unity",
+  "description": "Hightouch Events SDK for Unity",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "https://github.com/ht-sdks/events-sdk-csharp",
+  "changelogUrl": "https://github.com/ht-sdks/events-sdk-csharp/releases",
+  "licensesUrl": "https://github.com/ht-sdks/events-sdk-csharp/blob/main/LICENSE.md",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2"
+  },
+  "keywords": [
+    "Hightouch Events",
+    "Hightouch Unity"
+  ],
+  "author": {
+    "name": "Hightouch",
+    "email": "developers@hightouch.io",
+    "url": "https://www.hightouch.io"
+  }
 }
