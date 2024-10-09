@@ -78,7 +78,6 @@ echo "packing ..."
 if [ "$(jq -r '.version' events-sdk-csharp/package.json)" == $VERSION ]
 then
   echo "$VERSION is the same as the current package version"
-  exit
 fi
 # update version in package.json
 echo "$(jq --arg VERSION "$VERSION" '.version=$VERSION' events-sdk-csharp/package.json)" > events-sdk-csharp/package.json
@@ -86,6 +85,7 @@ echo "$README" > events-sdk-csharp/README.md
 # remove all files in Plugins folder recursively
 rm -rf events-sdk-csharp/Plugins/*
 # download events-sdk-csharp and its dependencies from nuget
+nuget locals all -clear
 nuget install Hightouch.Events.CSharp -Version "$VERSION" -OutputDirectory events-sdk-csharp/Plugins
 # remove dependencies that are not required
 declare -a deps=(events-sdk-csharp/Plugins/Hightouch.Events.CSharp.*)
