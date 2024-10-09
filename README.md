@@ -38,8 +38,6 @@
   - [Samples](#samples)
   - [Compatibility](#compatibility)
   - [Changelog](#changelog)
-  - [Contributing](#contributing)
-  - [Code of Conduct](#code-of-conduct)
 
 `events-sdk-csharp` is supported across the following platforms:
 * net/.net core/.net framework
@@ -590,12 +588,3 @@ This library targets `.NET Standard 1.3` and `.NET Standard 2.0`. Checkout [here
 
 ## Changelog
 [View the events-sdk-csharp changelog on GitHub](https://github.com/ht-sdks/events-sdk-csharp/releases).
-
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## Code of Conduct
-
-Before contributing, please also see our [code of conduct](CODE_OF_CONDUCT.md).
