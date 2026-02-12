@@ -264,8 +264,12 @@ Publishing is automated via GitHub Actions (`.github/workflows/release.yml`).
 - **CI config**: `.github/workflows/ci.yml`
 - **Release config**: `.github/workflows/release.yml`
 - **CI triggers**: Push to `main`, pull requests to `main`, manual dispatch
-- **CI steps**: `dotnet build`, `dotnet test`
+- **CI steps**: Install OpenSSL 1.1, `dotnet build`, `dotnet test`
 - **.NET versions in CI**: 3.1.x, 5.0.x, 6.0.x, 8.0.x
+
+### OpenSSL 1.1 Requirement
+
+The CI installs OpenSSL 1.1 (`libssl1.1`) because `ubuntu-latest` (Ubuntu 24.04+) only ships OpenSSL 3.x. .NET 3.1 and 5.0 require OpenSSL 1.x at runtime, so the CI downloads it from the Ubuntu 20.04 archive. If the EOL target frameworks (`netcoreapp3.1`, `net5.0`) are ever removed from the test matrix, this step can be dropped.
 
 ### CI Failures After Dependency Updates
 
