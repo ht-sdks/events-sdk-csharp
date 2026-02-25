@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install OpenSSL 1.1 (required for .NET 3.1 and 5.0 on Ubuntu 24.04+)
+        run: |
+          wget -q https://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+          echo "09ee28588a1fb5613ddc6c26a992d5a76931b3cf22c022930da413a5e580599e  libssl1.1_1.1.1f-1ubuntu2_amd64.deb" | sha256sum --check
+          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+          rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
