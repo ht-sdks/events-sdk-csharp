@@ -76,17 +76,17 @@ namespace Hightouch.Events.Serialization
 
             if (value is byte || value is sbyte || value is short || value is ushort || value is int)
             {
-                return System.Convert.ToInt32(value);
+                return global::System.Convert.ToInt32(value);
             }
 
             if (value is uint || value is long)
             {
-                return System.Convert.ToInt64(value);
+                return global::System.Convert.ToInt64(value);
             }
 
             if (value is ulong || value is decimal || value is double || value is float)
             {
-                return System.Convert.ToDouble(value);
+                return global::System.Convert.ToDouble(value);
             }
 
             var genericMap = AsStringObjectMap(value);
