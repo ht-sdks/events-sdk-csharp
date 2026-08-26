@@ -327,7 +327,7 @@ namespace Tests
             _plugin.Setup(o => o.Screen(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Screen(null, null, null);
+            _analytics.Screen(null, null, (string)null);
 
             Assert.NotEmpty(actual);
             Assert.True(actual[0].Properties.Count == 0);
@@ -397,7 +397,7 @@ namespace Tests
             _plugin.Setup(o => o.Page(Capture.In(actual)));
 
             _analytics.Add(_plugin.Object);
-            _analytics.Page(null, null, null);
+            _analytics.Page(null, null, (string)null);
 
             Assert.NotEmpty(actual);
             Assert.True(actual[0].Properties.Count == 0);
@@ -521,6 +521,143 @@ namespace Tests
             Assert.NotEmpty(actual);
             Assert.Equal(expectedPrevious, actual[0].PreviousId);
             Assert.Equal(expected, actual[0].UserId);
+        }
+
+        [Fact]
+        public void TestTrackWithContextSchemaVersion()
+        {
+            var actual = new List<TrackEvent>();
+            _plugin.Setup(o => o.Track(Capture.In(actual)));
+            _analytics.Add(_plugin.Object);
+
+            _analytics.Track("Signed Up", new JsonObject(), ProtocolContext("v1"));
+
+            Assert.NotEmpty(actual);
+            Assert.Equal("v1", SchemaVersion(actual[0]));
+            Assert.True(actual[0].Context.ContainsKey("library"));
+
+            // StartupQueue replays via Process(event); context must survive a second pass.
+            _analytics.Process(actual[0]);
+            Assert.Equal("v1", SchemaVersion(actual[0]));
+        }
+
+        [Fact]
+        public void TestAliasOverlappingContextDoesNotSwap()
+        {
+            var actual = new List<AliasEvent>();
+            _plugin.Setup(o => o.Alias(Capture.In(actual)));
+            _analytics.Add(_plugin.Object);
+
+            _analytics.Identify("prev");
+            _analytics.Alias("id-v1", ProtocolContext("v1"));
+            _analytics.Alias("id-v2", ProtocolContext("v2"));
+
+            Assert.Equal(2, actual.Count);
+            Assert.Equal("id-v1", actual[0].UserId);
+            Assert.Equal("v1", SchemaVersion(actual[0]));
+            Assert.Equal("id-v2", actual[1].UserId);
+            Assert.Equal("v2", SchemaVersion(actual[1]));
+
+            var first = new AliasEvent("processed-v1", "prev");
+            var second = new AliasEvent("processed-v2", "prev");
+            _analytics.Process(second, ProtocolContext("v2"));
+            _analytics.Process(first, ProtocolContext("v1"));
+            Assert.Equal("v2", SchemaVersion(second));
+            Assert.Equal("v1", SchemaVersion(first));
+        }
+
+        [Fact]
+        public void TestOldOverloadsUnchanged()
+        {
+            var tracks = new List<TrackEvent>();
+            var aliases = new List<AliasEvent>();
+            _plugin.Setup(o => o.Track(Capture.In(tracks)));
+            _plugin.Setup(o => o.Alias(Capture.In(aliases)));
+            _analytics.Add(_plugin.Object);
+
+            var properties = new JsonObject { ["foo"] = "bar" };
+            _analytics.Track("foo", properties);
+            _analytics.Identify("prev");
+            _analytics.Alias("next");
+
+            Assert.NotEmpty(tracks);
+            Assert.Equal(properties, tracks[0].Properties);
+            Assert.Equal("foo", tracks[0].Event);
+            Assert.False(tracks[0].Context.ContainsKey("protocols"));
+            Assert.True(tracks[0].Context.ContainsKey("library"));
+
+            Assert.NotEmpty(aliases);
+            Assert.Equal("prev", aliases[0].PreviousId);
+            Assert.Equal("next", aliases[0].UserId);
+            Assert.False(aliases[0].Context.ContainsKey("protocols"));
+        }
+
+        [Fact]
+        public void TestScreenIdentifyGroupAliasContext()
+        {
+            var screens = new List<ScreenEvent>();
+            var pages = new List<PageEvent>();
+            var identifies = new List<IdentifyEvent>();
+            var groups = new List<GroupEvent>();
+            var aliases = new List<AliasEvent>();
+            _plugin.Setup(o => o.Screen(Capture.In(screens)));
+            _plugin.Setup(o => o.Page(Capture.In(pages)));
+            _plugin.Setup(o => o.Identify(Capture.In(identifies)));
+            _plugin.Setup(o => o.Group(Capture.In(groups)));
+            _plugin.Setup(o => o.Alias(Capture.In(aliases)));
+            _analytics.Add(_plugin.Object);
+
+            _analytics.Screen("Home", new JsonObject(), ProtocolContext("v1"));
+            _analytics.Page("Home", new JsonObject(), ProtocolContext("v1"));
+            _analytics.Identify("user", new JsonObject(), ProtocolContext("v1"));
+            _analytics.Identify(new JsonObject(), ProtocolContext("v1"));
+            _analytics.Group("grp", new JsonObject(), ProtocolContext("v1"));
+            _analytics.Alias("alias-id", ProtocolContext("v2"));
+
+            Assert.Equal("v1", SchemaVersion(screens[0]));
+            Assert.Equal("v1", SchemaVersion(pages[0]));
+            Assert.Equal("v1", SchemaVersion(identifies[0]));
+            Assert.Equal("v1", SchemaVersion(identifies[1]));
+            Assert.Equal("v1", SchemaVersion(groups[0]));
+            Assert.Equal("v2", SchemaVersion(aliases[0]));
+        }
+
+        [Fact]
+        public void TestTrackContextDeepMergesNestedMaps()
+        {
+            var actual = new List<TrackEvent>();
+            _plugin.Setup(o => o.Track(Capture.In(actual)));
+            _analytics.Add(_plugin.Object);
+
+            var context = new Dictionary<string, object>
+            {
+                ["protocols"] = new Dictionary<string, object>
+                {
+                    ["schemaVersion"] = "v1"
+                },
+                ["locale"] = "en-US"
+            };
+            _analytics.Track("foo", new JsonObject(), context);
+
+            Assert.Equal("v1", SchemaVersion(actual[0]));
+            Assert.Equal("en-US", actual[0].Context.GetString("locale"));
+            Assert.True(actual[0].Context.ContainsKey("library"));
+        }
+
+        private static IDictionary<string, object> ProtocolContext(string version)
+        {
+            return new Dictionary<string, object>
+            {
+                ["protocols"] = new Dictionary<string, object>
+                {
+                    ["schemaVersion"] = version
+                }
+            };
+        }
+
+        private static string SchemaVersion(RawEvent @event)
+        {
+            return @event.Context.GetJsonObject("protocols").GetString("schemaVersion");
         }
     }
 }

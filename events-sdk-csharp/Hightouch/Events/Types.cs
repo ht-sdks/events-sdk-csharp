@@ -39,7 +39,12 @@ namespace Hightouch.Events
         internal void ApplyRawEventData(UserInfo userInfo)
         {
             MessageId = Guid.NewGuid().ToString();
-            Context = new JsonObject();
+            // Keep Context if it was already merged onto this event (per-call overlay
+            // or a StartupQueue replay). Wiping it would drop schemaVersion etc.
+            if (Context == null)
+            {
+                Context = new JsonObject();
+            }
             Timestamp = DateTime.UtcNow.ToString("o"); // iso8601
             Integrations = new JsonObject();
 

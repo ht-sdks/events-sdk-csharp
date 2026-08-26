@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Hightouch.Events.Serialization;
 
@@ -14,13 +15,26 @@ namespace Hightouch.Events
         /// <param name="properties">Properties to describe the action</param>
         public virtual void Track(string name, JsonObject properties = default)
         {
+            Track(name, properties, null);
+        }
+
+        /// <summary>
+        /// The track method is how you record any actions your users perform. Each action is known by a
+        /// name, like 'Purchased a T-Shirt'. You can also record properties specific to those actions.
+        /// For example a 'Purchased a Shirt' event might have properties like revenue or size.
+        /// </summary>
+        /// <param name="name">Name of the action</param>
+        /// <param name="properties">Properties to describe the action</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Track(string name, JsonObject properties, IDictionary<string, object> context)
+        {
             if (properties == null)
             {
                 properties = new JsonObject();
             }
 
             var trackEvent = new TrackEvent(name, properties);
-            Process(trackEvent);
+            Process(trackEvent, context);
         }
 
         /// <summary>
@@ -61,6 +75,27 @@ namespace Hightouch.Events
         /// <param name="traits">Traits about the user</param>
         public virtual void Identify(string userId, JsonObject traits = default)
         {
+            Identify(userId, traits, null);
+        }
+
+        /// <summary>
+        /// Identify lets you tie one of your users and their actions to a recognizable {@code userId}.
+        /// It also lets you record {@code traits} about the user, like their email, name, account type,
+        /// etc.
+        ///
+        /// Traits and userId will be automatically cached and available on future sessions for the
+        /// same user. To update a trait on the server, call identify with the same user id.
+        /// You can also use <see cref="Identify(JsonObject)"/> for this purpose.
+        ///
+        /// In the case when user logs out, make sure to call <see cref="Reset"/> to clear user's identity
+        /// info.
+        ///
+        /// </summary>
+        /// <param name="userId">Unique identifier which you recognize a user by in your own database</param>
+        /// <param name="traits">Traits about the user</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Identify(string userId, JsonObject traits, IDictionary<string, object> context)
+        {
             if (traits == null)
             {
                 traits = new JsonObject();
@@ -76,7 +111,7 @@ namespace Hightouch.Events
             });
 
             var identifyEvent = new IdentifyEvent(userId, traits);
-            Process(identifyEvent);
+            Process(identifyEvent, context);
         }
 
         /// <summary>
@@ -95,6 +130,26 @@ namespace Hightouch.Events
         /// <param name="traits">Traits about the user</param>
         public virtual void Identify(JsonObject traits)
         {
+            Identify(traits, null);
+        }
+
+        /// <summary>
+        /// Identify lets you tie one of your users and their actions to a recognizable {@code userId}.
+        /// It also lets you record {@code traits} about the user, like their email, name, account type,
+        /// etc.
+        ///
+        /// Traits and userId will be automatically cached and available on future sessions for the
+        /// same user.
+        ///
+        /// This method is used to update a trait on the server with the same user id.
+        ///
+        /// In the case when user logs out, make sure to call <see cref="Reset"/> to clear user's identity
+        /// info.
+        /// </summary>
+        /// <param name="traits">Traits about the user</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Identify(JsonObject traits, IDictionary<string, object> context)
+        {
             if (traits == null)
             {
                 traits = new JsonObject();
@@ -109,7 +164,7 @@ namespace Hightouch.Events
             });
 
             var identifyEvent = new IdentifyEvent(_userInfo._userId, traits);
-            Process(identifyEvent);
+            Process(identifyEvent, context);
         }
 
         /// <summary>
@@ -179,12 +234,39 @@ namespace Hightouch.Events
         /// <param name="category">A category to describe the screen</param>
         public virtual void Screen(string title, JsonObject properties = default, string category = "")
         {
+            Screen(title, properties, category, null);
+        }
+
+        /// <summary>
+        /// The screen methods let your record whenever a user sees a screen of your mobile app, and
+        /// attach a name, category or properties to the screen. Either category or name must be
+        /// provided.
+        /// </summary>
+        /// <param name="title">A name for the screen</param>
+        /// <param name="properties">Properties to add extra information to this call</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Screen(string title, JsonObject properties, IDictionary<string, object> context)
+        {
+            Screen(title, properties, "", context);
+        }
+
+        /// <summary>
+        /// The screen methods let your record whenever a user sees a screen of your mobile app, and
+        /// attach a name, category or properties to the screen. Either category or name must be
+        /// provided.
+        /// </summary>
+        /// <param name="title">A name for the screen</param>
+        /// <param name="properties">Properties to add extra information to this call</param>
+        /// <param name="category">A category to describe the screen</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Screen(string title, JsonObject properties, string category, IDictionary<string, object> context)
+        {
             if (properties == null)
             {
                 properties = new JsonObject();
             }
             var screenEvent = new ScreenEvent(category, title, properties);
-            Process(screenEvent);
+            Process(screenEvent, context);
         }
 
         /// <summary>
@@ -220,12 +302,39 @@ namespace Hightouch.Events
         /// <param name="category">A category to describe the page</param>
         public virtual void Page(string title, JsonObject properties = default, string category = "")
         {
+            Page(title, properties, category, null);
+        }
+
+        /// <summary>
+        /// The page methods let your record whenever a user sees a page of your web app, and
+        /// attach a name, category or properties to the page. Either category or name must be
+        /// provided.
+        /// </summary>
+        /// <param name="title">A name for the page</param>
+        /// <param name="properties">Properties to add extra information to this call</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Page(string title, JsonObject properties, IDictionary<string, object> context)
+        {
+            Page(title, properties, "", context);
+        }
+
+        /// <summary>
+        /// The page methods let your record whenever a user sees a page of your web app, and
+        /// attach a name, category or properties to the page. Either category or name must be
+        /// provided.
+        /// </summary>
+        /// <param name="title">A name for the page</param>
+        /// <param name="properties">Properties to add extra information to this call</param>
+        /// <param name="category">A category to describe the page</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Page(string title, JsonObject properties, string category, IDictionary<string, object> context)
+        {
             if (properties == null)
             {
                 properties = new JsonObject();
             }
             var pageEvent = new PageEvent(category, title, properties);
-            Process(pageEvent);
+            Process(pageEvent, context);
         }
 
         /// <summary>
@@ -261,12 +370,27 @@ namespace Hightouch.Events
         /// <param name="traits">Traits about the group</param>
         public virtual void Group(string groupId, JsonObject traits = default)
         {
+            Group(groupId, traits, null);
+        }
+
+        /// <summary>
+        /// The group method lets you associate a user with a group. It also lets you record custom
+        /// traits about the group, like industry or number of employees.
+        ///
+        /// If you've called <see cref="Identify(string,JsonObject)"/> before, this will
+        /// automatically remember the userId. If not, it will fall back to use the anonymousId instead.
+        /// </summary>
+        /// <param name="groupId">Unique identifier which you recognize a group by in your own database</param>
+        /// <param name="traits">Traits about the group</param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Group(string groupId, JsonObject traits, IDictionary<string, object> context)
+        {
             if (traits == null)
             {
                 traits = new JsonObject();
             }
             var groupEvent = new GroupEvent(groupId, traits);
-            Process(groupEvent);
+            Process(groupEvent, context);
         }
 
         /// <summary>
@@ -302,6 +426,20 @@ namespace Hightouch.Events
         /// </param>
         public virtual void Alias(string newId)
         {
+            Alias(newId, null);
+        }
+
+        /// <summary>
+        /// The alias method is used to merge two user identities, effectively connecting two sets of
+        /// user data as one. This is an advanced method, but it is required to manage user identities
+        /// successfully in some of our integrations.
+        /// </summary>
+        /// <param name="newId">The new ID you want to alias the existing ID to. The existing ID will be either
+        /// the previousId if you have called identify, or the anonymous ID.
+        /// </param>
+        /// <param name="context">Optional per-call context deep-merged onto this event only</param>
+        public virtual void Alias(string newId, IDictionary<string, object> context)
+        {
             var aliasEvent = new AliasEvent(newId, _userInfo._userId ?? _userInfo._anonymousId);
 
             // update cache and persist copy
@@ -311,7 +449,7 @@ namespace Hightouch.Events
                 await Store.Dispatch<UserInfo.SetUserIdAction, UserInfo>(new UserInfo.SetUserIdAction(newId));
             });
 
-            Process(aliasEvent);
+            Process(aliasEvent, context);
         }
     }
 }

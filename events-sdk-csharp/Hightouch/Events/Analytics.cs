@@ -82,9 +82,21 @@ namespace Hightouch.Events
         /// <param name="incomingEvent">An event conforming to RawEvent to be processed in the timeline</param>
         public void Process(RawEvent incomingEvent)
         {
+            Process(incomingEvent, null);
+        }
+
+        /// <summary>
+        /// Process a raw event through the system, deep-merging <paramref name="context"/> onto
+        /// that event's Context. Null context leaves today's behavior unchanged.
+        /// </summary>
+        /// <param name="incomingEvent">An event conforming to RawEvent to be processed in the timeline</param>
+        /// <param name="context">Optional per-call context overlay for this event only</param>
+        public void Process(RawEvent incomingEvent, IDictionary<string, object> context)
+        {
             if (!Enable) return;
 
             incomingEvent.ApplyRawEventData(_userInfo);
+            JsonMerge.DeepMerge(incomingEvent.Context, context);
             AnalyticsScope.Launch(AnalyticsDispatcher, () =>
             {
                 Timeline.Process(incomingEvent);
