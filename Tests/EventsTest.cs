@@ -293,7 +293,7 @@ namespace Tests
             _analytics.Add(_plugin.Object);
             _analytics.Identify(expectedUserId);
 
-            _analytics.Identify(null, null);
+            _analytics.Identify((string)null, (JsonObject)null);
 
             var userIdEmpty = UserInfo.DefaultState(_analytics.Storage);
             Assert.Null(userIdEmpty._userId);
