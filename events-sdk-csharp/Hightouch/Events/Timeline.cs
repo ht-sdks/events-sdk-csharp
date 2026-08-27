@@ -28,7 +28,6 @@ namespace Hightouch.Events
         /// initiate the event's lifecycle
         /// </summary>
         /// <param name="incomingEvent">event to be processed</param>
-        /// <param name="enrichment">a closure that enables enrichment on the generated event</param>
         /// <returns>event after processing</returns>
         internal RawEvent Process(RawEvent incomingEvent)
         {
