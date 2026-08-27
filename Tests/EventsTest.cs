@@ -663,6 +663,33 @@ namespace Tests
         }
 
         [Fact]
+        public void TestEnrichmentSurvivesPluginReturningReplacementEvent()
+        {
+            var actual = new List<TrackEvent>();
+            // this Before plugin replaces the event using the copy constructor,
+            // which does not copy the Enrichment closure
+            _plugin.Setup(o => o.Track(It.IsAny<TrackEvent>()))
+                .Returns((TrackEvent trackEvent) => new TrackEvent(trackEvent));
+            _afterPlugin.Setup(o => o.Track(Capture.In(actual)));
+
+            _analytics.Add(_plugin.Object);
+            _analytics.Add(_afterPlugin.Object);
+            _analytics.Track("foo", enrichment: @event =>
+            {
+                @event.Context["protocols"] = new JsonObject
+                {
+                    ["schemaVersion"] = "1-0-0"
+                };
+                return @event;
+            });
+
+            Assert.NotEmpty(actual);
+            // the replacement event lost the closure, but the captured closure must still run
+            Assert.Null(actual[0].Enrichment);
+            Assert.Equal("1-0-0", SchemaVersion(actual[0]));
+        }
+
+        [Fact]
         public void TestEnrichmentNeverSerialized()
         {
             var actual = new List<TrackEvent>();

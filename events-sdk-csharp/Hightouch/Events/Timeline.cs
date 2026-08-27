@@ -32,13 +32,16 @@ namespace Hightouch.Events
         /// <returns>event after processing</returns>
         internal RawEvent Process(RawEvent incomingEvent)
         {
+            // Deliberate divergence from Segment upstream: capture the per-call enrichment up front so it survives plugins that return a fresh event (upstream drops it).
+            Func<RawEvent, RawEvent> enrichment = incomingEvent?.Enrichment;
+
             // Apply before and enrichment types first to start the timeline processing.
             RawEvent beforeResult = ApplyPlugins(PluginType.Before, incomingEvent);
             // Enrichment is like middleware, a chance to update the event across the board before going to destinations.
             RawEvent enrichmentResult = ApplyPlugins(PluginType.Enrichment, beforeResult);
-            if (enrichmentResult != null && enrichmentResult.Enrichment != null)
+            if (enrichmentResult != null && enrichment != null)
             {
-                enrichmentResult = enrichmentResult.Enrichment(enrichmentResult);
+                enrichmentResult = enrichment(enrichmentResult);
             }
 
             // Make sure not to update the events during this next cycle. Since each destination may want different
