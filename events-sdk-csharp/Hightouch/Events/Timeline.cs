@@ -28,6 +28,7 @@ namespace Hightouch.Events
         /// initiate the event's lifecycle
         /// </summary>
         /// <param name="incomingEvent">event to be processed</param>
+        /// <param name="enrichment">a closure that enables enrichment on the generated event</param>
         /// <returns>event after processing</returns>
         internal RawEvent Process(RawEvent incomingEvent)
         {
@@ -35,6 +36,10 @@ namespace Hightouch.Events
             RawEvent beforeResult = ApplyPlugins(PluginType.Before, incomingEvent);
             // Enrichment is like middleware, a chance to update the event across the board before going to destinations.
             RawEvent enrichmentResult = ApplyPlugins(PluginType.Enrichment, beforeResult);
+            if (enrichmentResult != null && enrichmentResult.Enrichment != null)
+            {
+                enrichmentResult = enrichmentResult.Enrichment(enrichmentResult);
+            }
 
             // Make sure not to update the events during this next cycle. Since each destination may want different
             // data than other destinations we don't want them conflicting and changing what a real result should be

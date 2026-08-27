@@ -1,6 +1,12 @@
 using global::System;
 using Hightouch.Events.Serialization;
 
+#if NETSTANDARD2_0
+using System.Text.Json.Serialization;
+#else
+using Newtonsoft.Json;
+#endif
+
 namespace Hightouch.Events
 {
     public class DestinationMetadata
@@ -17,6 +23,9 @@ namespace Hightouch.Events
         public virtual string MessageId { get; set; }
         public virtual string UserId { get; set; }
         public virtual string Timestamp { get; set; }
+
+        [JsonIgnore]
+        public Func<RawEvent, RawEvent> Enrichment { get; set; }
 
         // JSON types
         public JsonObject Context { get; set; }
@@ -36,8 +45,9 @@ namespace Hightouch.Events
             Integrations = rawEvent.Integrations;
         }
 
-        internal void ApplyRawEventData(UserInfo userInfo)
+        internal void ApplyRawEventData(UserInfo userInfo, Func<RawEvent, RawEvent> enrichment)
         {
+            Enrichment = enrichment;
             MessageId = Guid.NewGuid().ToString();
             Context = new JsonObject();
             Timestamp = DateTime.UtcNow.ToString("o"); // iso8601

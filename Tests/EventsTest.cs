@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using Hightouch.Events;
 using Hightouch.Events.Utilities;
@@ -16,6 +20,8 @@ namespace Tests
 
         private readonly Mock<StubEventPlugin> _plugin;
 
+        private readonly Mock<StubAfterEventPlugin> _afterPlugin;
+
         public EventsTest()
         {
             _settings = JsonUtility.FromJson<Settings?>(
@@ -27,6 +33,11 @@ namespace Tests
                 .ReturnsAsync(_settings);
 
             _plugin = new Mock<StubEventPlugin>
+            {
+                CallBase = true
+            };
+
+            _afterPlugin = new Mock<StubAfterEventPlugin>
             {
                 CallBase = true
             };
@@ -293,7 +304,7 @@ namespace Tests
             _analytics.Add(_plugin.Object);
             _analytics.Identify(expectedUserId);
 
-            _analytics.Identify(null, null);
+            _analytics.Identify(userId: null, traits: null);
 
             var userIdEmpty = UserInfo.DefaultState(_analytics.Storage);
             Assert.Null(userIdEmpty._userId);
@@ -521,6 +532,170 @@ namespace Tests
             Assert.NotEmpty(actual);
             Assert.Equal(expectedPrevious, actual[0].PreviousId);
             Assert.Equal(expected, actual[0].UserId);
+        }
+
+        [Fact]
+        public void TestTrackEnrichment()
+        {
+            string expectedEvent = "foo";
+            string expectedAnonymousId = "bar";
+            var actual = new List<TrackEvent>();
+            _afterPlugin.Setup(o => o.Track(Capture.In(actual)));
+
+            _analytics.Add(_afterPlugin.Object);
+            _analytics.Track(expectedEvent, enrichment: @event =>
+            {
+                @event.AnonymousId = expectedAnonymousId;
+                return @event;
+            });
+
+            Assert.NotEmpty(actual);
+            Assert.Equal(expectedAnonymousId, actual[0].AnonymousId);
+            Assert.Equal(expectedEvent, actual[0].Event);
+        }
+
+        [Fact]
+        public void TestAliasEnrichment()
+        {
+            string expectedPrevious = "foo";
+            string expected = "bar";
+            string expectedAnonymousId = "baz";
+            var actual = new List<AliasEvent>();
+            _afterPlugin.Setup(o => o.Alias(Capture.In(actual)));
+
+            _analytics.Add(_afterPlugin.Object);
+            _analytics.Identify(expectedPrevious);
+            _analytics.Alias(expected, @event =>
+            {
+                @event.AnonymousId = expectedAnonymousId;
+                return @event;
+            });
+
+            Assert.NotEmpty(actual);
+            Assert.Equal(expectedPrevious, actual[0].PreviousId);
+            Assert.Equal(expected, actual[0].UserId);
+            Assert.Equal(expectedAnonymousId, actual[0].AnonymousId);
+        }
+
+        [Fact]
+        public void TestOverlappingAliasEnrichmentsDoNotSwapStamps()
+        {
+            var actual = new ConcurrentBag<AliasEvent>();
+            _afterPlugin.Setup(o => o.Alias(It.IsAny<AliasEvent>()))
+                .Returns((AliasEvent aliasEvent) =>
+                {
+                    actual.Add(aliasEvent);
+                    return aliasEvent;
+                });
+            _analytics.Add(_afterPlugin.Object);
+
+            using (var barrier = new Barrier(2))
+            {
+                Func<string, Func<RawEvent, RawEvent>> enrichmentFor = schemaVersion => @event =>
+                {
+                    // best effort to hold both enrichment closures in flight at the same time;
+                    // the timeout keeps the test from hanging when the platform serializes them
+                    barrier.SignalAndWait(TimeSpan.FromSeconds(2));
+                    @event.Context["protocols"] = new JsonObject
+                    {
+                        ["schemaVersion"] = schemaVersion
+                    };
+                    return @event;
+                };
+
+                Task first = Task.Run(() => _analytics.Alias("first", enrichmentFor("1-0-0")));
+                Task second = Task.Run(() => _analytics.Alias("second", enrichmentFor("2-0-0")));
+                Assert.True(Task.WaitAll(new[] { first, second }, TimeSpan.FromSeconds(10)));
+            }
+
+            Assert.Equal(2, actual.Count);
+            foreach (AliasEvent aliasEvent in actual)
+            {
+                string expected = aliasEvent.UserId == "first" ? "1-0-0" : "2-0-0";
+                Assert.Equal(expected, SchemaVersion(aliasEvent));
+            }
+        }
+
+        [Fact]
+        public void TestTrackEnrichmentPreservesPlatformContext()
+        {
+            var actual = new List<TrackEvent>();
+            _afterPlugin.Setup(o => o.Track(Capture.In(actual)));
+
+            _analytics.Add(_afterPlugin.Object);
+            _analytics.Track("foo", enrichment: @event =>
+            {
+                @event.Context["protocols"] = new JsonObject
+                {
+                    ["schemaVersion"] = "1-0-0"
+                };
+                return @event;
+            });
+
+            Assert.NotEmpty(actual);
+            Assert.Equal("1-0-0", SchemaVersion(actual[0]));
+            // context stamped by ContextPlugin must survive per-call enrichment
+            Assert.True(actual[0].Context.ContainsKey("library"));
+            Assert.True(actual[0].Context.ContainsKey("os"));
+            Assert.True(actual[0].Context.ContainsKey("platform"));
+        }
+
+        [Fact]
+        public void TestEventWithoutEnrichmentHasNoProtocols()
+        {
+            var actual = new List<TrackEvent>();
+            _afterPlugin.Setup(o => o.Track(Capture.In(actual)));
+
+            _analytics.Add(_afterPlugin.Object);
+            _analytics.Track("enriched", enrichment: @event =>
+            {
+                @event.Context["protocols"] = new JsonObject
+                {
+                    ["schemaVersion"] = "1-0-0"
+                };
+                return @event;
+            });
+            _analytics.Track("plain");
+
+            Assert.Equal(2, actual.Count);
+            Assert.False(actual[1].Context.ContainsKey("protocols"));
+            Assert.Null(actual[1].Enrichment);
+        }
+
+        [Fact]
+        public void TestEnrichmentNeverSerialized()
+        {
+            var actual = new List<TrackEvent>();
+            _afterPlugin.Setup(o => o.Track(Capture.In(actual)));
+
+            _analytics.Add(_afterPlugin.Object);
+            _analytics.Track("enriched", enrichment: @event => @event);
+            _analytics.Track("plain");
+
+            Assert.Equal(2, actual.Count);
+            Assert.NotNull(actual[0].Enrichment);
+
+            string withEnrichment = JsonUtility.ToJson(actual[0]);
+            Assert.DoesNotContain("enrichment", withEnrichment, StringComparison.OrdinalIgnoreCase);
+
+            // the payload must be byte-identical whether or not a closure is attached
+            actual[0].Enrichment = null;
+            string withoutEnrichment = JsonUtility.ToJson(actual[0]);
+            Assert.Equal(withEnrichment, withoutEnrichment);
+
+            string plain = JsonUtility.ToJson(actual[1]);
+            Assert.DoesNotContain("enrichment", plain, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string SchemaVersion(RawEvent @event)
+        {
+            if (@event.Context == null || !@event.Context.ContainsKey("protocols"))
+            {
+                return null;
+            }
+
+            var protocols = @event.Context["protocols"] as JsonObject;
+            return protocols?.GetString("schemaVersion");
         }
     }
 }
