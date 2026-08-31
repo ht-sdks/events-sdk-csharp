@@ -51,7 +51,7 @@ Record the number of passing tests before making any changes. The test suite cur
 dotnet list package --vulnerable
 ```
 
-Review any vulnerabilities. Note: The SDK currently has a known advisory on `System.Text.Json` 8.0.4 (GHSA-8g4q-xg66-9fp4).
+Review any vulnerabilities.
 
 ### 4. Check Outdated Packages
 
