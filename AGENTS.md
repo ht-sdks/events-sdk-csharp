@@ -10,7 +10,7 @@ This file provides instructions for AI agents working on this C# repository.
 - **Testing**: xunit (with Moq for mocking)
 - **CI**: GitHub Actions
 - **SDK target frameworks**: `netstandard1.3`, `netstandard2.0`
-- **Test target frameworks**: `netcoreapp3.1`, `net5.0`, `net6.0`, `net8.0`
+- **Test target frameworks**: `net6.0`, `net8.0`, `net9.0`, `net10.0`
 
 ---
 
@@ -22,7 +22,7 @@ This file provides instructions for AI agents working on this C# repository.
 # Check .NET SDK version
 dotnet --version
 
-# List all installed SDKs (CI uses 3.1.x, 5.0.x, 6.0.x, 8.0.x)
+# List all installed SDKs (CI uses 6.0.x, 8.0.x, 9.0.x, 10.0.x)
 dotnet --list-sdks
 
 # Ensure you're at the repository root
@@ -42,7 +42,7 @@ dotnet build
 dotnet test
 ```
 
-Record the number of passing tests before making any changes. The test suite currently has **139 tests** across four target frameworks (netcoreapp3.1, net5.0, net6.0, net8.0). This ensures you can verify nothing broke after upgrading.
+Record the number of passing tests before making any changes. The test suite currently has **146 tests** per target framework (net6.0, net8.0, net9.0, net10.0). This ensures you can verify nothing broke after upgrading.
 
 ### 3. Check for Security Advisories
 
@@ -136,7 +136,7 @@ Compare test results to the baseline. Fix any failures before proceeding.
 
 ### 7. Verify CI Would Pass
 
-The CI workflow (`.github/workflows/ci.yml`) runs on `ubuntu-latest` with .NET SDKs 3.1.x, 5.0.x, 6.0.x, and 8.0.x. The steps are:
+The CI workflow (`.github/workflows/ci.yml`) runs on `ubuntu-latest` with .NET SDKs 6.0.x, 8.0.x, 9.0.x, and 10.0.x. The steps are:
 
 ```bash
 dotnet build
@@ -149,8 +149,8 @@ If you have multiple SDKs installed, ensure tests pass across all target framewo
 # Run tests for a specific framework
 dotnet test --framework net6.0
 dotnet test --framework net8.0
-dotnet test --framework net5.0
-dotnet test --framework netcoreapp3.1
+dotnet test --framework net9.0
+dotnet test --framework net10.0
 ```
 
 ---
@@ -160,12 +160,8 @@ dotnet test --framework netcoreapp3.1
 - **CI config**: `.github/workflows/ci.yml`
 - **Release config**: `.github/workflows/release.yml`
 - **CI triggers**: Push to `main`, pull requests to `main`, manual dispatch
-- **CI steps**: Install OpenSSL 1.1, `dotnet build`, `dotnet test`
-- **.NET versions in CI**: 3.1.x, 5.0.x, 6.0.x, 8.0.x
-
-### OpenSSL 1.1 Requirement
-
-The CI installs OpenSSL 1.1 (`libssl1.1`) because `ubuntu-latest` (Ubuntu 24.04+) only ships OpenSSL 3.x. .NET 3.1 and 5.0 require OpenSSL 1.x at runtime, so the CI downloads it from the Ubuntu 20.04 archive. If the EOL target frameworks (`netcoreapp3.1`, `net5.0`) are ever removed from the test matrix, this step can be dropped.
+- **CI steps**: `dotnet build`, `dotnet test`
+- **.NET versions in CI**: 6.0.x, 8.0.x, 9.0.x, 10.0.x
 
 ### CI Failures After Dependency Updates
 
@@ -198,10 +194,6 @@ When upgrading NuGet packages, verify they still support `netstandard1.3`. This 
 
 The codebase has intentional `[Obsolete]` attributes on migration helpers (`Compat/Migration.cs`). Build warnings from these are expected and not a sign of problems.
 
-### End-of-Life Frameworks in Tests
-
-The test project targets `netcoreapp3.1` and `net5.0`, which are end-of-life. These may encounter issues with newer system libraries or packages. If updating test infrastructure packages, ensure they still support these older frameworks or consider removing them from the test matrix.
-
 ---
 
 ## Quick Reference
@@ -211,7 +203,7 @@ The test project targets `netcoreapp3.1` and `net5.0`, which are end-of-life. Th
 | Restore packages | `dotnet restore` |
 | Build solution | `dotnet build` |
 | Run all tests | `dotnet test` |
-| Run tests (specific framework) | `dotnet test --framework net8.0` |
+| Run tests (specific framework) | `dotnet test --framework net10.0` |
 | Clean build artifacts | `dotnet clean` |
 | Check outdated packages | `dotnet list package --outdated` |
 | Check vulnerabilities | `dotnet list package --vulnerable` |
