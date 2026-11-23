@@ -133,6 +133,7 @@ namespace Hightouch.Events.Utilities
                 string[] fileUrlList = _storage.Read(StorageConstants.Events).Split(',');
                 foreach (string url in fileUrlList)
                 {
+                    if (_httpClient.WaitingForSourceProbe) break;
                     if (string.IsNullOrEmpty(url))
                     {
                         continue;
