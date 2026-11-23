@@ -22,6 +22,8 @@ namespace Hightouch.Events.Utilities
         internal const string DefaultCdnHost = "https://cdn-settings.hightouch-events.com";
 
         private readonly string _apiKey;
+        private DateTime _nextSourceProbe;
+        private int _probeDelaySeconds = 1;
 
         protected readonly string _apiHost;
 
@@ -105,6 +107,8 @@ namespace Hightouch.Events.Utilities
 
         public virtual async Task<bool> Upload(byte[] data)
         {
+            if (DateTime.UtcNow < _nextSourceProbe) return false;
+
             string uploadURL = HightouchURL(_apiHost, "/v1/batch");
             try
             {
@@ -121,6 +125,15 @@ namespace Hightouch.Events.Utilities
                         case var n when n >= 300 && n < 400:
                             AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnexpectedHttpCode, message: "Response code: " + n);
                             return false;
+                        case 401:
+                        case 403:
+                        case 404:
+                            _nextSourceProbe = DateTime.UtcNow.AddSeconds(_probeDelaySeconds);
+                            _probeDelaySeconds = Math.Min(60, 2 * _probeDelaySeconds);
+                            AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkServerRejected, message: "Check the write key and endpoint. Queued events will be retried.");
+                            return false;
+                        case 408:
+                            return false;
                         case 429:
                             AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkServerLimited, message: "Response code: 429");
                             return false;
@@ -132,6 +145,7 @@ namespace Hightouch.Events.Utilities
                     }
                 }
 
+                _probeDelaySeconds = 1;
                 return true;
             }
             catch (Exception e)
