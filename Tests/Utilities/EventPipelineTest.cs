@@ -67,21 +67,6 @@ namespace Tests.Utilities
         }
 
         [Theory]
-        [InlineData(401)]
-        [InlineData(403)]
-        [InlineData(404)]
-        public async Task ConfigurationFailureDefersSubsequentRequests(int status)
-        {
-            var client = new Mock<HTTPClient>(null, null, null) { CallBase = true };
-            client.Setup(c => c.DoPost(It.IsAny<string>(), _bytes))
-                .ReturnsAsync(new HTTPClient.Response { StatusCode = status });
-
-            Assert.False(await client.Object.Upload(_bytes));
-            Assert.False(await client.Object.Upload(_bytes));
-            client.Verify(c => c.DoPost(It.IsAny<string>(), _bytes), Times.Once());
-        }
-
-        [Theory]
         [InlineData(408)]
         [InlineData(429)]
         [InlineData(522)]

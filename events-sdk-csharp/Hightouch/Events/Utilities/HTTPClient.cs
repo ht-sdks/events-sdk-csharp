@@ -22,15 +22,6 @@ namespace Hightouch.Events.Utilities
         internal const string DefaultCdnHost = "https://cdn-settings.hightouch-events.com";
 
         private readonly string _apiKey;
-        private DateTime _nextSourceProbe;
-        internal bool WaitingForSourceProbe => DateTime.UtcNow < _nextSourceProbe;
-        private int _probeDelaySeconds = 1;
-
-        private void DeferSourceProbe()
-        {
-            _nextSourceProbe = DateTime.UtcNow.AddSeconds(_probeDelaySeconds);
-            _probeDelaySeconds = Math.Min(60, 2 * _probeDelaySeconds);
-        }
 
         protected readonly string _apiHost;
 
@@ -114,14 +105,10 @@ namespace Hightouch.Events.Utilities
 
         public virtual async Task<bool> Upload(byte[] data)
         {
-            if (WaitingForSourceProbe) return false;
-
             string uploadURL = HightouchURL(_apiHost, "/v1/batch");
             try
             {
                 Response response = await DoPost(uploadURL, data);
-                if (_nextSourceProbe != default && (response.StatusCode == 408 || response.StatusCode == 429 ||
-                    (response.StatusCode >= 500 && response.StatusCode < 600))) DeferSourceProbe();
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -133,12 +120,6 @@ namespace Hightouch.Events.Utilities
                             return false;
                         case var n when n >= 300 && n < 400:
                             AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnexpectedHttpCode, message: "Response code: " + n);
-                            return false;
-                        case 401:
-                        case 403:
-                        case 404:
-                            DeferSourceProbe();
-                            AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkServerRejected, message: "Check the write key and endpoint. Queued events will be retried.");
                             return false;
                         case 408:
                             return false;
@@ -153,13 +134,10 @@ namespace Hightouch.Events.Utilities
                     }
                 }
 
-                _nextSourceProbe = default;
-                _probeDelaySeconds = 1;
                 return true;
             }
             catch (Exception e)
             {
-                if (_nextSourceProbe != default) DeferSourceProbe();
                 AnalyticsRef?.ReportInternalError(AnalyticsErrorType.NetworkUnknown, e, "Unknown network error when uploading to url");
             }
 
