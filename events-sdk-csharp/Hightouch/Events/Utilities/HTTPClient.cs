@@ -116,6 +116,7 @@ namespace Hightouch.Events.Utilities
 
                     switch (response.StatusCode)
                     {
+                        case 408:
                         case var n when n >= 1 && n < 300:
                             return false;
                         case var n when n >= 300 && n < 400:

@@ -67,6 +67,19 @@ namespace Tests.Utilities
         }
 
         [Theory]
+        [InlineData(408)]
+        [InlineData(429)]
+        [InlineData(522)]
+        public async Task TransientResponseKeepsUploadForRetry(int status)
+        {
+            var client = new Mock<HTTPClient>(null, null, null) { CallBase = true };
+            client.Setup(c => c.DoPost(It.IsAny<string>(), _bytes))
+                .ReturnsAsync(new HTTPClient.Response { StatusCode = status });
+
+            Assert.False(await client.Object.Upload(_bytes));
+        }
+
+        [Theory]
         [MemberData(nameof(GetPipelineProvider))]
         public async Task TestPut(IEventPipelineProvider provider)
         {
