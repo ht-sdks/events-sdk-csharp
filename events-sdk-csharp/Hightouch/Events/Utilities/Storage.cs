@@ -34,7 +34,6 @@ namespace Hightouch.Events.Utilities
         public static readonly StorageConstants Traits = new StorageConstants(_Traits);
         public static readonly StorageConstants AnonymousId = new StorageConstants(_AnonymousId);
         public static readonly StorageConstants Settings = new StorageConstants(_Settings);
-        internal static readonly StorageConstants StartupEvents = new StorageConstants("hightouch.startup.events");
         public static readonly StorageConstants Events = new StorageConstants(_Events);
     }
 

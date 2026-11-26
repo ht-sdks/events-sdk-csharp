@@ -42,24 +42,27 @@ namespace Tests
         }
 
         [Fact]
-        public void StartupQueuePersistsOriginalIdentityAndSkipsCallbacks()
+        public async Task StartupReplayPreservesCapturedEventAndEnrichment()
         {
-            string saved = null;
-            _storage.Setup(s => s.WritePrefs(StorageConstants.StartupEvents, It.IsAny<string>()))
-                .Callback<StorageConstants, string>((_, json) => saved = json);
-            var stopped = new Hightouch.Events.System(_analytics.Configuration, _settings.Value, false, true);
-            _analytics.StartupEvents.RunningUpdate(stopped);
-            var early = new TrackEvent("early", new JsonObject()) { UserId = "original" };
-            _analytics.Process(early);
-            _analytics.Process(new TrackEvent("session only", null), e => e);
-            var records = JsonUtility.FromJson<global::System.Collections.Generic.Dictionary<string, string>>(saved);
-            var recovered = Hightouch.Events.Plugins.StartupQueue.Decode(Assert.Single(records).Value);
-            Assert.Equal(early.MessageId, recovered.MessageId);
-            Assert.Equal(early.Timestamp, recovered.Timestamp);
-            Assert.Equal(early.AnonymousId, recovered.AnonymousId);
-            Assert.Equal("original", recovered.UserId);
-            _analytics.StartupEvents.RunningUpdate(new Hightouch.Events.System(_analytics.Configuration, _settings.Value, true, true));
-            Assert.Equal("{}", saved);
+            async Task SetRunning(bool value) =>
+                await _analytics.Store.Dispatch<Hightouch.Events.System.ToggleRunningAction, Hightouch.Events.System>(
+                    new Hightouch.Events.System.ToggleRunningAction(value));
+            await SetRunning(false);
+            var early = new TrackEvent("early", new JsonObject());
+            var delivered = new global::System.Collections.Generic.List<RawEvent>();
+            _analytics.Process(early, e => { delivered.Add(e); return e; });
+            var messageId = early.MessageId;
+            var timestamp = early.Timestamp;
+            var anonymousId = early.AnonymousId;
+            Assert.Empty(delivered);
+
+            _analytics.Identify("later");
+            await SetRunning(true);
+            var replay = Assert.Single(delivered);
+            Assert.Equal(messageId, replay.MessageId);
+            Assert.Equal(timestamp, replay.Timestamp);
+            Assert.Equal(anonymousId, replay.AnonymousId);
+            Assert.Null(replay.UserId);
         }
 
         [Fact]

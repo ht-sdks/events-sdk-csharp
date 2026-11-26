@@ -44,7 +44,6 @@ namespace Hightouch.Events
         internal UserInfo _userInfo;
 
         private bool _enable;
-        internal readonly StartupQueue StartupEvents = new StartupQueue();
 
         /// <summary>
         /// Public constructor of Analytics.
@@ -87,7 +86,6 @@ namespace Hightouch.Events
             if (!Enable) return;
 
             incomingEvent.ApplyRawEventData(_userInfo, enrichment);
-            if (StartupEvents.Capture(incomingEvent)) return;
             AnalyticsScope.Launch(AnalyticsDispatcher, () =>
             {
                 Timeline.Process(incomingEvent);
@@ -203,7 +201,7 @@ namespace Hightouch.Events
 
         private void Startup()
         {
-            Add(StartupEvents);
+            Add(new StartupQueue());
             Add(new ContextPlugin());
 
             // use semaphore for this coroutine to force completion,

@@ -53,11 +53,7 @@ namespace Hightouch.Events.Utilities
             Running = false;
         }
 
-        public void Put(RawEvent @event)
-        {
-            _analytics.StartupEvents.WillWrite(@event.MessageId);
-            _writeChannel.Send(@event);
-        }
+        public void Put(RawEvent @event) => _writeChannel.Send(@event);
 
         public void Flush() => _writeChannel.Send(s_flushEvent);
 
@@ -102,7 +98,6 @@ namespace Hightouch.Events.Utilities
                         string str = JsonUtility.ToJson(e);
                         Analytics.Logger.Log(LogLevel.Debug, message: _logTag + " running " + str);
                         await _storage.Write(StorageConstants.Events, str);
-                        _analytics.StartupEvents.DidWrite(e.MessageId);
 
                         foreach (IFlushPolicy flushPolicy in _flushPolicies)
                         {
