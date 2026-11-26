@@ -164,7 +164,7 @@ namespace Hightouch.Events.Utilities
                         continue;
                     }
 
-                    bool shouldCleanup = true;
+                    bool shouldCleanup = false;
                     try
                     {
                         shouldCleanup = await _httpClient.Upload(data);

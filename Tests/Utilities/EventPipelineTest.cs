@@ -81,6 +81,32 @@ namespace Tests.Utilities
 
         [Theory]
         [MemberData(nameof(GetPipelineProvider))]
+        public async Task UploadExceptionKeepsFileForNextFlush(IEventPipelineProvider provider)
+        {
+            var removed = new TaskCompletionSource<bool>();
+            _storage.Setup(s => s.Read(StorageConstants.Events)).Returns(() => removed.Task.IsCompleted ? "" : _file);
+            _storage.Setup(s => s.RemoveFile(_file)).Callback(() => removed.TrySetResult(true));
+            _mockHttpClient.SetupSequence(c => c.Upload(_bytes))
+                .ThrowsAsync(new System.Net.Http.HttpRequestException()).ReturnsAsync(true);
+
+            var pipeline = provider.Create(_analytics, "key");
+            pipeline.Start();
+            try
+            {
+                pipeline.Flush();
+                pipeline.Flush();
+                await removed.Task.WaitAsync(TimeSpan.FromSeconds(5));
+                _mockHttpClient.Verify(c => c.Upload(_bytes), Times.Exactly(2));
+                _storage.Verify(s => s.RemoveFile(_file), Times.Once);
+            }
+            finally
+            {
+                pipeline.Stop();
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(GetPipelineProvider))]
         public async Task TestPut(IEventPipelineProvider provider)
         {
             IEventPipeline eventPipeline = provider.Create(_analytics, "key");
