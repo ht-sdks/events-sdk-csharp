@@ -42,6 +42,30 @@ namespace Tests
         }
 
         [Fact]
+        public async Task StartupReplayPreservesCapturedEventAndEnrichment()
+        {
+            async Task SetRunning(bool value) =>
+                await _analytics.Store.Dispatch<Hightouch.Events.System.ToggleRunningAction, Hightouch.Events.System>(
+                    new Hightouch.Events.System.ToggleRunningAction(value));
+            await SetRunning(false);
+            var early = new TrackEvent("early", new JsonObject());
+            var delivered = new global::System.Collections.Generic.List<RawEvent>();
+            _analytics.Process(early, e => { delivered.Add(e); return e; });
+            var messageId = early.MessageId;
+            var timestamp = early.Timestamp;
+            var anonymousId = early.AnonymousId;
+            Assert.Empty(delivered);
+
+            _analytics.Identify("later");
+            await SetRunning(true);
+            var replay = Assert.Single(delivered);
+            Assert.Equal(messageId, replay.MessageId);
+            Assert.Equal(timestamp, replay.Timestamp);
+            Assert.Equal(anonymousId, replay.AnonymousId);
+            Assert.Null(replay.UserId);
+        }
+
+        [Fact]
         public void TestProcess()
         {
             var actual = new TrackEvent("test", new JsonObject());

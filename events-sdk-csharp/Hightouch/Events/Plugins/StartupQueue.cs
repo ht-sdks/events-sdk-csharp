@@ -1,6 +1,6 @@
-using global::System.Collections.Concurrent;
-using Hightouch.Events.Utilities;
+using global::System.Collections.Generic;
 using Hightouch.Events.Concurrent;
+using Hightouch.Events.Utilities;
 using Hightouch.Events.Sovran;
 
 namespace Hightouch.Events.Plugins
@@ -13,8 +13,8 @@ namespace Hightouch.Events.Plugins
     public class StartupQueue : Plugin, ISubscriber
     {
         private static readonly int s_maxSize = 1000;
-        private readonly AtomicBool _running = new AtomicBool(false);
-        private readonly ConcurrentQueue<RawEvent> _queuedEvents = new ConcurrentQueue<RawEvent>();
+        private bool _running;
+        private readonly Queue<RawEvent> _queuedEvents = new Queue<RawEvent>();
 
         public override PluginType Type => PluginType.Before;
 
@@ -26,41 +26,32 @@ namespace Hightouch.Events.Plugins
 
         public override RawEvent Execute(RawEvent incomingEvent)
         {
-            if (!_running.Get() && incomingEvent != null)
+            lock (_queuedEvents)
             {
-                Analytics.Logger.Log(LogLevel.Debug, message: "HightouchStartupQueue queueing event");
-                // The timeline hasn't started, we need to start queueing so we don't lose events
-                if (_queuedEvents.Count >= s_maxSize)
-                {
-                    // We've exceeded the max size and need to start dropping events
-                    _queuedEvents.TryDequeue(out _);
-                }
+                if (_running || incomingEvent == null) return incomingEvent;
+                if (_queuedEvents.Count >= s_maxSize) _queuedEvents.Dequeue();
                 _queuedEvents.Enqueue(incomingEvent);
                 return null;
             }
-            // The timeline has started, just let the event pass on to the next plugin
-            return incomingEvent;
         }
 
         private void RunningUpdate(System state)
         {
-            Analytics.Logger.Log(LogLevel.Debug, message: "Analytics starting = " + state._running);
-            _running.Set(state._running);
-            if (_running.Get())
+            RawEvent[] pending;
+            lock (_queuedEvents)
             {
-                ReplayEvents();
+                _running = state._running;
+                if (!_running || _queuedEvents.Count == 0) return;
+                pending = _queuedEvents.ToArray();
+                _queuedEvents.Clear();
             }
-        }
-
-        private void ReplayEvents()
-        {
-            while (!_queuedEvents.IsEmpty)
+            Analytics.AnalyticsScope.Launch(Analytics.AnalyticsDispatcher, () =>
             {
-                if (_queuedEvents.TryDequeue(out RawEvent e))
+                foreach (var e in pending)
                 {
-                    Analytics.Process(e);
+                    if (Analytics.Enable) Analytics.Timeline.Process(e);
                 }
-            }
+            });
         }
     }
 }
